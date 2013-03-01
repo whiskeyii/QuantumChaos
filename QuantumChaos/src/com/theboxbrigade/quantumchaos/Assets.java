@@ -4,6 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The Assets class is where all paths for sounds and textures belong.
+ * When you add an asset data field, be sure to add the corresponding path in load()
+ * 
+ * @author Jason
+ */
 public class Assets {
 	public static TextureRegion logo;
 	

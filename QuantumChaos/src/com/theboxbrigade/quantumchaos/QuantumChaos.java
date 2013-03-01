@@ -1,18 +1,17 @@
 package com.theboxbrigade.quantumchaos;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class QuantumChaos implements ApplicationListener {
+public class QuantumChaos extends Game {
 	public static final int WIDTH = Globals.GAME_WIDTH;
 	public static final int HEIGHT = Globals.GAME_HEIGHT;
+	
+	private TitleScreen titleScreen;
+	private MainMenuScreen mainMenuScreen;
+	private PlayingScreen playingScreen;
 	
 	private boolean running = false;
 	private Screen screen;
@@ -23,10 +22,11 @@ public class QuantumChaos implements ApplicationListener {
 	
 	@Override
 	public void create() {
+		titleScreen = new TitleScreen();
 		Assets.load();
 		Gdx.input.setInputProcessor(input);
 		running = true;
-		setScreen(new TitleScreen());
+		setScreen(titleScreen);
 	}
 
 	@Override

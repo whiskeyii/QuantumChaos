@@ -29,7 +29,7 @@ public class Input implements InputProcessor {
 		if (key == Keys.S) button = WALK_SOUTH;
 		if (key == Keys.A) button = WALK_WEST;
 		
-		if (key == Keys.E) button = INTERACT;
+		if (key == Keys.E || key == Keys.ENTER) button = INTERACT;
 		if (key == Keys.SPACE) button = ATTACK;
 		if (key == Keys.ESCAPE) button = ESCAPE;
 		

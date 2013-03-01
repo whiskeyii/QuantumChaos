@@ -4,16 +4,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 
+/**
+ * All screens should extend this Screen class.
+ * 
+ * @author Jason
+ */
 public abstract class Screen {
-	private QuantumChaos quantumChaosGame;
+	private QuantumChaos game;
 	public SpriteBatch spriteBatch;
 	
 	public void removed() {
 		spriteBatch.dispose();
 	}
 	
-	public final void init(QuantumChaos quantumChaosGame) {
-		this.quantumChaosGame = quantumChaosGame;
+	public final void init(QuantumChaos game) {
+		this.game = game;
 		Matrix4 projection = new Matrix4();
 		projection.setToOrtho(0, Globals.GAME_WIDTH, Globals.GAME_HEIGHT, 0, -1, 1);
 		
@@ -22,7 +27,7 @@ public abstract class Screen {
 	}
 	
 	protected void setScreen(Screen screen) {
-		quantumChaosGame.setScreen(screen);
+		game.setScreen(screen);
 	}
 	
 	public void draw(TextureRegion region, int x, int y) {
