@@ -4,22 +4,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.Position;
 import com.theboxbrigade.quantumchaos.Tile;
 import com.theboxbrigade.quantumchaos.TileManager;
+import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.models.Model;
 import com.theboxbrigade.quantumchaos.models.PlayerModel;
 import com.theboxbrigade.quantumchaos.views.PlayerView;
 import com.theboxbrigade.quantumchaos.views.View;
 
 public class PlayerController extends ObjectController {
-	private static final int DIRECTION_NORTH = 0;
-	private static final int DIRECTION_EAST = 1;
-	private static final int DIRECTION_SOUTH = 2;
-	private static final int DIRECTION_WEST = 3;
 	protected int maxHP = 4;
 	protected int currentHP = 4;
 	protected Position position;
-	protected int facingDir = DIRECTION_NORTH;
+	protected int facingDir = Globals.NORTH;
 	protected int keyPressed;
-	protected boolean moving;
+	protected boolean moving, moved;
 	protected boolean carrying;
 	protected boolean sliding;
 	protected boolean attacking;
@@ -27,7 +24,10 @@ public class PlayerController extends ObjectController {
 	protected boolean dead;
 	protected TileManager tileManager;
 	
-	public PlayerController() {
+	public PlayerController(TileManager tileManager) {
+		this.tileManager = tileManager;
+		position = new Position(this.tileManager);
+		
 		model = new PlayerModel(this);
 		view = new PlayerView();
 	}
@@ -62,30 +62,30 @@ public class PlayerController extends ObjectController {
 	
 	public void processInput(int keyPressed, Tile tile) {
 		switch (keyPressed) {
-		case DIRECTION_NORTH:	if (facingDir == DIRECTION_NORTH) {
-									((PlayerModel)model).move(DIRECTION_NORTH);
-								} else {
-									((PlayerModel)model).face(DIRECTION_NORTH);
-								}
+		case 0:	if (facingDir == Globals.NORTH) {
+					((PlayerModel)model).move(Globals.NORTH);
+				} else {
+					((PlayerModel)model).face(Globals.NORTH);
+				}
+				break;
+		case 1:	if (facingDir == Globals.EAST) {
+					((PlayerModel)model).move(Globals.EAST);
+				} else {
+					((PlayerModel)model).face(Globals.EAST);
+				}
 								break;
-		case DIRECTION_EAST:	if (facingDir == DIRECTION_EAST) {
-									((PlayerModel)model).move(DIRECTION_EAST);
-								} else {
-									((PlayerModel)model).face(DIRECTION_EAST);
-								}
+		case 2:	if (facingDir == Globals.SOUTH) {
+					((PlayerModel)model).move(Globals.SOUTH);
+				} else {
+					((PlayerModel)model).face(Globals.SOUTH);
+				}
 								break;
-		case DIRECTION_SOUTH:	if (facingDir == DIRECTION_SOUTH) {
-									((PlayerModel)model).move(DIRECTION_SOUTH);
-								} else {
-									((PlayerModel)model).face(DIRECTION_SOUTH);
-								}
-								break;
-		case DIRECTION_WEST:	if (facingDir == DIRECTION_WEST) {
-									((PlayerModel)model).move(DIRECTION_WEST);
-								} else {
-									((PlayerModel)model).face(DIRECTION_WEST);
-								}
-								break;
+		case 3:	if (facingDir == Globals.WEST) {
+					((PlayerModel)model).move(Globals.WEST);
+				} else {
+					((PlayerModel)model).face(Globals.WEST);
+				}
+				break;
 	}
 	}
 	
@@ -121,11 +121,4 @@ public class PlayerController extends ObjectController {
 	public SpriteBatch getViewSpriteBatch() {
 		return ((PlayerView)view).getSpriteBatch();
 	}
-	
-	@Override
-	public void setState(int state) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 }

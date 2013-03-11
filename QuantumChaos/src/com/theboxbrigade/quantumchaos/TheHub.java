@@ -15,6 +15,8 @@ import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
 
 public class TheHub extends World {
+	private static final float CAMERA_STEP_X = 2f;
+	private static final float CAMERA_STEP_Y = 1f;
 	protected final String path = "data/maps/";
 	protected final String mapName = "TheHub";
 	protected TileManager tileManager;
@@ -29,7 +31,7 @@ public class TheHub extends World {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (w / h) * 10, 10);
 		camera.zoom = 2;
-		camera.translate(20,-10);
+		camera.translate(20.5f,-17f);
 		camera.update();
 
 		spriteBatch = new SpriteBatch();
@@ -45,7 +47,9 @@ public class TheHub extends World {
 		tileManager = new TileManager(tileMap);
 		System.out.println(tileManager.getNumberOfLayers());
 		
-		player = new PlayerController();
+		// Create the Player object;
+		// Respective MVC components
+		player = new PlayerController(tileManager);
 	}
 
 	@Override
@@ -53,8 +57,12 @@ public class TheHub extends World {
 		Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		camera.update();
+		
+		// Draw the Tiled Map
 		tileMapRenderer.setView(camera);
 		tileMapRenderer.render();
+		
+		// Draw the player
 		spriteBatch = player.getViewSpriteBatch();
 		spriteBatch.begin();
 			player.update();
@@ -67,7 +75,7 @@ public class TheHub extends World {
 			System.out.println("PRESSED NORTH");
 			player.processInput(Input.WALK_NORTH);
 			if (player.isMoving()) {
-				camera.translate(2,1);
+				camera.translate(CAMERA_STEP_X,CAMERA_STEP_Y);
 				camera.update();
 			}
 			input.releaseAllKeys();
@@ -75,7 +83,7 @@ public class TheHub extends World {
 			System.out.println("PRESSED EAST");
 			player.processInput(Input.WALK_EAST);
 			if (player.isMoving()) {
-				camera.translate(2,-1);
+				camera.translate(CAMERA_STEP_X,-CAMERA_STEP_Y);
 				camera.update();
 			}
 			input.releaseAllKeys();
@@ -83,7 +91,7 @@ public class TheHub extends World {
 			System.out.println("PRESSED SOUTH");
 			player.processInput(Input.WALK_SOUTH);
 			if (player.isMoving()) {
-				camera.translate(-2,-1);
+				camera.translate(-CAMERA_STEP_X,-CAMERA_STEP_Y);
 				camera.update();
 			}
 			input.releaseAllKeys();
@@ -91,7 +99,7 @@ public class TheHub extends World {
 			System.out.println("PRESSED WEST");
 			player.processInput(Input.WALK_WEST);
 			if (player.isMoving()) {
-				camera.translate(-2,1);
+				camera.translate(-CAMERA_STEP_X,CAMERA_STEP_Y);
 				camera.update();
 			}
 			input.releaseAllKeys();

@@ -4,5 +4,5 @@ public abstract class CharacterModel extends Model {
 
 	public abstract void face(int direction);
 	
-	public abstract void move(int direction);
+	public abstract boolean move(int direction);
 }

@@ -21,15 +21,15 @@ public class Tile implements TiledMapTile {
 	protected MapProperties properties;
 	protected TextureRegion textureRegion;
 	
-	public Tile() {
+	public Tile(int xIndex, int yIndex) {
 		this.id = numTiles++;
 		this.type = TYPE_NULL;
-		this.xIndex = -1;
-		this.yIndex = -1;
+		this.xIndex = xIndex;
+		this.yIndex = yIndex;
 	}
 	
 	public Tile(TiledMapTile tile) {
-		this();
+		this(0,0);
 		this.properties = tile.getProperties();
 		this.textureRegion = tile.getTextureRegion();
 	}
@@ -42,8 +42,16 @@ public class Tile implements TiledMapTile {
 		return xIndex;
 	}
 	
+	public void setX(int x) {
+		this.xIndex = x;
+	}
+	
 	public int getY() {
 		return yIndex;
+	}
+	
+	public void setY(int y) {
+		this.yIndex = y;
 	}
 	
 	public boolean isWalkable() {
@@ -93,5 +101,11 @@ public class Tile implements TiledMapTile {
 			return true;
 		}
 		return false;
+	}
+	
+	public String toString() {
+		String out = "";
+		out += "(" + xIndex + ", " + yIndex + ")";
+		return out;
 	}
 }

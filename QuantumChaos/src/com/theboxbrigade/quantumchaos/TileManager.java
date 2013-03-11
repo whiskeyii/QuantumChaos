@@ -63,7 +63,9 @@ public class TileManager {
 		for (int layer=0; layer<nLayers; layer++) {
 			for (int col=0; col<nColumns; col++) {
 				for (int row=0; row<nRows; row++) {
-					tiles[layer][col][row] = new Tile(layers[layer].getCell(col, row).getTile());
+					tiles[layer][col][row] = new Tile(layers[layer].getCell(col, nRows-1-row).getTile());
+					tiles[layer][col][row].setX(col);
+					tiles[layer][col][row].setY(row);
 					if (tiles[layer][col][row].getProperties().get("walkable").equals("true")) {
 						tiles[layer][col][row].setWalkable(true);
 					}
@@ -73,7 +75,7 @@ public class TileManager {
 	}
 	
 	public Tile getTile(int x, int y) {
-		if (x > 0 && x < nColumns && y > 0 && y < nRows) {
+		if (x >= 0 && x < nColumns && y >= 0 && y < nRows) {
 			return tiles[0][x][y];
 		}
 		return null;

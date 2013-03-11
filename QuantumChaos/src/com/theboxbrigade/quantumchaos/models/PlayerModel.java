@@ -1,9 +1,6 @@
 package com.theboxbrigade.quantumchaos.models;
 
 import com.theboxbrigade.quantumchaos.Carryable;
-import com.theboxbrigade.quantumchaos.Position;
-import com.theboxbrigade.quantumchaos.Tile;
-import com.theboxbrigade.quantumchaos.TileManager;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
 import com.theboxbrigade.quantumchaos.general.Globals;
 
@@ -26,34 +23,24 @@ public class PlayerModel extends CharacterModel {
 	}
 
 	@Override
-	public void move(int direction) {
+	public boolean move(int direction) {
 		moving = true;
-		sync();
-	}
-	
-	public void move(int direction, TileManager tileManager) {
-		moving = true;
-		int dx, dy;
 		switch (direction) {
-			case 0: // NORTH
-					dx = 1; dy = 0;
+			// NORTH
+			case 0: moving = ((PlayerController)controller).getPosition().shiftVerticallyBy(-1,true);
 					break;
-			case 1: // EAST
-					dx = 0; dy = 1;
+			// EAST
+			case 1: moving = ((PlayerController)controller).getPosition().shiftHorizontallyBy(1,true);
 					break;
-			case 2: // SOUTH
-					dx = -1; dy = 0;
+			// SOUTH
+			case 2: moving = ((PlayerController)controller).getPosition().shiftVerticallyBy(1,true);
 					break;
-			case 3: // WEST
-					dx = 0; dy = -1;
+			// WEST
+			case 3: moving = ((PlayerController)controller).getPosition().shiftHorizontallyBy(-1,true);
 					break;
-			default: dx = 0; dy = 0;
 		}
-		int newX = ((PlayerController)controller).getPosition().getTile().getX() + dx;
-		int newY = ((PlayerController)controller).getPosition().getTile().getY() + dy;
-		((PlayerController)controller).setPosition(new Position(tileManager.getTile(newX, newY)));
-		System.out.println("(" + newX + ", " + newY + ")");
 		sync();
+		return moving;
 	}
 	
 	public void carry(Carryable itemCarried) {

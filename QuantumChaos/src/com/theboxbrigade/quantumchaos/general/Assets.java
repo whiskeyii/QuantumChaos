@@ -14,6 +14,7 @@ public class Assets {
 	public static TextureRegion logo;
 	public static TextureRegion robertFaceN, robertFaceE, robertFaceS, robertFaceW;
 	public static TextureRegion robertWalkN, robertWalkE, robertWalkS, robertWalkW;
+	public static TextureRegion boxPortal, boxPortalRed, boxPortalBlue, boxPortalGreen;
 	
 	public static void load() {
 		logo = load("data/images/logo.png", 1024, 768);
@@ -26,6 +27,11 @@ public class Assets {
 		robertWalkW = load("data/images/robert.png", 65, 128, 65, 128, false);
 		robertWalkE = load("data/images/robert.png", 130, 128, 65, 128, false);
 		robertWalkS = load("data/images/robert.png", 195, 128, 65, 128, false);
+		
+		boxPortal = load("data/images/boxes.png",345,0,115,102, false);
+		boxPortalRed = load("data/images/boxes.png",0,0,115,102, false);
+		boxPortalGreen = load("data/images/boxes.png",115,0,115,102, false);
+		boxPortalBlue = load("data/images/boxes.png",230,0,115,102, false);
 	}
 	
 	public static TextureRegion load(String name, int width, int height) {
