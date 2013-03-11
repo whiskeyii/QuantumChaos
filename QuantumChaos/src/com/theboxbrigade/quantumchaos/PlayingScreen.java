@@ -1,6 +1,7 @@
 package com.theboxbrigade.quantumchaos;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.theboxbrigade.quantumchaos.general.Input;
 
 public class PlayingScreen extends Screen {
 	SpriteBatch spriteBatch;
@@ -18,10 +19,6 @@ public class PlayingScreen extends Screen {
 
 	@Override
 	public void tick(Input input) {
-		if ((input.buttons[Input.WALK_NORTH] && !input.oldButtons[Input.WALK_NORTH])
-			|| (input.buttons[Input.WALK_EAST] && !input.oldButtons[Input.WALK_EAST])) {
-			System.out.println("PRESSED NORTH OR EAST");
-			input.releaseAllKeys();
-		}
+		world.parseInput(input);
 	}
 }

@@ -1,5 +1,8 @@
 package com.theboxbrigade.quantumchaos;
 
+import com.theboxbrigade.quantumchaos.general.Assets;
+import com.theboxbrigade.quantumchaos.general.Input;
+
 public class TitleScreen extends Screen {
 	private int time = 0;
 	

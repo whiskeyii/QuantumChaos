@@ -10,11 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.theboxbrigade.quantumchaos.controllers.PlayerController;
+import com.theboxbrigade.quantumchaos.general.Globals;
+import com.theboxbrigade.quantumchaos.general.Input;
 
 public class TheHub extends World {
 	protected final String path = "data/maps/";
 	protected final String mapName = "TheHub";
-
+	protected TileManager tileManager;
+	protected PlayerController player;
+	
 	@Override
 	public void create() {
 		System.out.println("I AM HERE - THE HUB!");
@@ -35,6 +40,12 @@ public class TheHub extends World {
 		assetManager.finishLoading();
 		tileMap = assetManager.get(path + mapName + ".tmx");
 		tileMapRenderer = new IsometricTiledMapRenderer(tileMap, 1f / 32f);
+		
+		// Read the tileMap
+		tileManager = new TileManager(tileMap);
+		System.out.println(tileManager.getNumberOfLayers());
+		
+		player = new PlayerController();
 	}
 
 	@Override
@@ -44,8 +55,47 @@ public class TheHub extends World {
 		camera.update();
 		tileMapRenderer.setView(camera);
 		tileMapRenderer.render();
+		spriteBatch = player.getViewSpriteBatch();
 		spriteBatch.begin();
+			player.update();
 		spriteBatch.end();
+	}
+	
+	@Override
+	public void parseInput(Input input) {
+		if (input.buttons[Input.WALK_NORTH] && !input.oldButtons[Input.WALK_NORTH]) {
+			System.out.println("PRESSED NORTH");
+			player.processInput(Input.WALK_NORTH);
+			if (player.isMoving()) {
+				camera.translate(2,1);
+				camera.update();
+			}
+			input.releaseAllKeys();
+		} else if (input.buttons[Input.WALK_EAST] && !input.oldButtons[Input.WALK_EAST]) {
+			System.out.println("PRESSED EAST");
+			player.processInput(Input.WALK_EAST);
+			if (player.isMoving()) {
+				camera.translate(2,-1);
+				camera.update();
+			}
+			input.releaseAllKeys();
+		} else if (input.buttons[Input.WALK_SOUTH] && !input.oldButtons[Input.WALK_SOUTH]) {
+			System.out.println("PRESSED SOUTH");
+			player.processInput(Input.WALK_SOUTH);
+			if (player.isMoving()) {
+				camera.translate(-2,-1);
+				camera.update();
+			}
+			input.releaseAllKeys();
+		} else if (input.buttons[Input.WALK_WEST] && !input.oldButtons[Input.WALK_WEST]) {
+			System.out.println("PRESSED WEST");
+			player.processInput(Input.WALK_WEST);
+			if (player.isMoving()) {
+				camera.translate(-2,1);
+				camera.update();
+			}
+			input.releaseAllKeys();
+		}
 	}
 
 }

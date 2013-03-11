@@ -3,6 +3,8 @@ package com.theboxbrigade.quantumchaos;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
+import com.theboxbrigade.quantumchaos.general.Globals;
+import com.theboxbrigade.quantumchaos.general.Input;
 
 /**
  * All screens should extend this Screen class.

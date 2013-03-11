@@ -4,6 +4,9 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.theboxbrigade.quantumchaos.general.Assets;
+import com.theboxbrigade.quantumchaos.general.Globals;
+import com.theboxbrigade.quantumchaos.general.Input;
 
 public class QuantumChaos extends Game {
 	public static final int WIDTH = Globals.GAME_WIDTH;

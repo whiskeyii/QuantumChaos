@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.theboxbrigade.quantumchaos.general.Input;
 
 public abstract class World {
 	protected SpriteBatch spriteBatch;
@@ -35,4 +36,6 @@ public abstract class World {
 	public IsometricTiledMapRenderer getMapRenderer() {
 		return tileMapRenderer;
 	}
+	
+	public abstract void parseInput(Input input);
 }
