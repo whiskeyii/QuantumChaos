@@ -1,7 +1,8 @@
 package com.theboxbrigade.quantumchaos.views;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 
@@ -10,7 +11,7 @@ public class PlayerView extends CharacterView {
 	private static final int TELEPORT = 6;
 	private static final int CELEBRATE = 7;
 	private int currentState;
-	private TextureRegion player;
+	private Sprite player;
 	private SpriteBatch spriteBatch = new SpriteBatch();
 	
 	@Override
@@ -29,6 +30,7 @@ public class PlayerView extends CharacterView {
 		}
 		draw(player, Globals.GAME_WIDTH/2, Globals.GAME_HEIGHT/2);
 	}
+	
 	@Override
 	public void updateAnimation(int state, int facingDir) {
 		// TODO Auto-generated method stub
@@ -38,7 +40,8 @@ public class PlayerView extends CharacterView {
 		return spriteBatch;
 	}
 	
-	private void draw(TextureRegion region, int x, int y) {
+	@Override
+	public void draw(Sprite region, float x, float y) {
 		spriteBatch.draw(region, x, y);
 	}
 }

@@ -3,7 +3,8 @@ package com.theboxbrigade.quantumchaos;
 import java.util.Iterator;
 
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.*;
 
 /**
@@ -24,17 +25,20 @@ public class TileManager {
 	private int nColumns, nRows;
 	private int nLayers = 0;
 	private TiledMapTileLayer[] layers;
+	private MapObjects objects;
 	
 	public TileManager(TiledMap tileMap) {
 		this.tileMap = tileMap;
-		Iterator<MapLayer> it = tileMap.getLayers().iterator();
+		Iterator<TiledMapTileLayer> it = tileMap.getLayers().getLayersByType(TiledMapTileLayer.class).iterator();
 		while (it.hasNext()) {
 			it.next();
 			nLayers++;
 		}
-		loadLayers();
+		loadTileLayers();
 		tiles = new Tile[nLayers][nColumns][nRows];
 		loadTiles();
+		
+		loadObjects();
 	}
 	
 	public int getNumberOfLayers() {
@@ -47,7 +51,7 @@ public class TileManager {
 		return null;
 	}
 	
-	private void loadLayers() {
+	private void loadTileLayers() {
 		layers = new TiledMapTileLayer[nLayers];
 		int cols, rows;
 		for (int i=0; i<nLayers; i++) {
@@ -57,6 +61,11 @@ public class TileManager {
 			if (cols > nColumns) nColumns = cols;
 			if (rows > nRows) nRows = rows;
 		}
+	}
+	
+	private void loadObjects() {
+		MapLayer objectsLayer = tileMap.getLayers().getLayer(0);
+		objects = objectsLayer.getObjects();
 	}
 	
 	private void loadTiles() {
@@ -83,5 +92,13 @@ public class TileManager {
 	
 	public Tile[][][] getAllTiles() {
 		return tiles;
+	}
+	
+	public MapObject getObjectbyName(String name) {
+		return objects.getObject(name);
+	}
+	
+	public MapObjects getObjects() {
+		return objects;
 	}
 }

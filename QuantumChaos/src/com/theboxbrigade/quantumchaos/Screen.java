@@ -38,6 +38,13 @@ public abstract class Screen {
 		spriteBatch.draw(region, x, y, width, region.getRegionHeight());
 	}
 	
+	public void draw(TextureRegion region, int x, int y, boolean flipY) {
+		int width = region.getRegionWidth();
+		if (width < 0) width = -width;
+		if (flipY) region.flip(false, true);
+		spriteBatch.draw(region, x, y, width, region.getRegionHeight());
+	}
+	
 	public abstract void render();
 	
 	public void tick(Input input) {}

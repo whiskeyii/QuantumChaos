@@ -39,6 +39,7 @@ public class PlayerModel extends CharacterModel {
 			case 3: moving = ((PlayerController)controller).getPosition().shiftHorizontallyBy(-1,true);
 					break;
 		}
+		System.out.println(((PlayerController)controller).getPosition());
 		sync();
 		return moving;
 	}

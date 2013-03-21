@@ -1,7 +1,18 @@
 package com.theboxbrigade.quantumchaos.views;
 
-public interface View {
-	public void update(int state);
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public abstract class View {
+	public SpriteBatch spriteBatch = new SpriteBatch();
 	
-	public void updateAnimation(int state);
+	public abstract void update(int state);
+	
+	public abstract void updateAnimation(int state);
+	
+	public abstract void draw(Sprite region, float x, float y);
+	
+	public SpriteBatch getSpriteBatch() {
+		return spriteBatch;
+	}
 }

@@ -16,7 +16,7 @@ public class PlayerController extends ObjectController {
 	protected Position position;
 	protected int facingDir = Globals.NORTH;
 	protected int keyPressed;
-	protected boolean moving, moved;
+	protected boolean moving;
 	protected boolean carrying;
 	protected boolean sliding;
 	protected boolean attacking;
@@ -48,6 +48,16 @@ public class PlayerController extends ObjectController {
 		return position;
 	}
 	
+	public Tile getTileInFrontOfPlayer() {
+		switch (facingDir) {
+			case 0: return tileManager.getTile(position.getX(), position.getY()-1);
+			case 1: return tileManager.getTile(position.getX()+1, position.getY());
+			case 2: return tileManager.getTile(position.getX(), position.getY()+1);
+			case 3: return tileManager.getTile(position.getX()-1, position.getY());
+		}
+		return null;
+	}
+	
 	public void setFacingDirection(int direction) {
 		this.facingDir = direction;
 	}
@@ -56,37 +66,40 @@ public class PlayerController extends ObjectController {
 		return facingDir;
 	}
 	
+	@Override
 	public void processInput(int keyPressed) {
-		processInput(keyPressed,null);
-	}
-	
-	public void processInput(int keyPressed, Tile tile) {
 		switch (keyPressed) {
-		case 0:	if (facingDir == Globals.NORTH) {
-					((PlayerModel)model).move(Globals.NORTH);
-				} else {
-					((PlayerModel)model).face(Globals.NORTH);
-				}
-				break;
-		case 1:	if (facingDir == Globals.EAST) {
-					((PlayerModel)model).move(Globals.EAST);
-				} else {
-					((PlayerModel)model).face(Globals.EAST);
-				}
-								break;
-		case 2:	if (facingDir == Globals.SOUTH) {
-					((PlayerModel)model).move(Globals.SOUTH);
-				} else {
-					((PlayerModel)model).face(Globals.SOUTH);
-				}
-								break;
-		case 3:	if (facingDir == Globals.WEST) {
-					((PlayerModel)model).move(Globals.WEST);
-				} else {
-					((PlayerModel)model).face(Globals.WEST);
-				}
-				break;
-	}
+			// NORTH
+			case 0:	if (facingDir == Globals.NORTH) {
+						((PlayerModel)model).move(Globals.NORTH);
+					} else {
+						((PlayerModel)model).face(Globals.NORTH);
+					}
+					break;
+			// EAST
+			case 1:	if (facingDir == Globals.EAST) {
+						((PlayerModel)model).move(Globals.EAST);
+					} else {
+						((PlayerModel)model).face(Globals.EAST);
+					}
+					break;
+			// SOUTH
+			case 2:	if (facingDir == Globals.SOUTH) {
+						((PlayerModel)model).move(Globals.SOUTH);
+					} else {
+						((PlayerModel)model).face(Globals.SOUTH);
+					}
+					break;
+			// WEST
+			case 3:	if (facingDir == Globals.WEST) {
+						((PlayerModel)model).move(Globals.WEST);
+					} else {
+						((PlayerModel)model).face(Globals.WEST);
+					}
+					break;
+			// INTERACT
+			case 4:
+		}
 	}
 	
 	public boolean isMoving() { return moving; }
@@ -114,11 +127,11 @@ public class PlayerController extends ObjectController {
 	
 	@Override
 	protected void updateView() {
-		// TODO Auto-generated method stub
 		((PlayerView)view).update(0, facingDir);
 	}
 	
-	public SpriteBatch getViewSpriteBatch() {
-		return ((PlayerView)view).getSpriteBatch();
+	@Override
+	public boolean equals(ObjectController other) {
+		return false;
 	}
 }
