@@ -124,10 +124,12 @@ public class TheHub extends World {
 		spriteBatch.end();
 		
 		// TEST - DIALOG BOX
-		spriteBatch = dialogBox.getSpriteBatch();
-		spriteBatch.begin();
-			dialogBox.update();
-		spriteBatch.end();
+		if (showDialog) {
+			spriteBatch = dialogBox.getSpriteBatch();
+			spriteBatch.begin();
+				dialogBox.update();
+			spriteBatch.end();
+		}
 	}
 	
 	@Override
@@ -136,37 +138,25 @@ public class TheHub extends World {
 			if (input.buttons[Input.WALK_NORTH] && !input.oldButtons[Input.WALK_NORTH]) {
 				player.processInput(Input.WALK_NORTH);
 				if (player.isMoving()) {
-					//updateObjects(Globals.NORTH);
 					timerListener.setMoving(true, Globals.NORTH);
-					//camera.translate(CAMERA_STEP_X,CAMERA_STEP_Y);
-					//camera.update();
 				}
 				input.releaseAllKeys();
 			} else if (input.buttons[Input.WALK_EAST] && !input.oldButtons[Input.WALK_EAST]) {
 				player.processInput(Input.WALK_EAST);
 				if (player.isMoving()) {
-					//updateObjects(Globals.EAST);
 					timerListener.setMoving(true, Globals.EAST);
-					//camera.translate(CAMERA_STEP_X,-CAMERA_STEP_Y);
-					//camera.update();
 				}
 				input.releaseAllKeys();
 			} else if (input.buttons[Input.WALK_SOUTH] && !input.oldButtons[Input.WALK_SOUTH]) {
 				player.processInput(Input.WALK_SOUTH);
 				if (player.isMoving()) {
-					//updateObjects(Globals.SOUTH);
 					timerListener.setMoving(true, Globals.SOUTH);
-					//camera.translate(-CAMERA_STEP_X,-CAMERA_STEP_Y);
-					//camera.update();
 				}
 				input.releaseAllKeys();
 			} else if (input.buttons[Input.WALK_WEST] && !input.oldButtons[Input.WALK_WEST]) {
 				player.processInput(Input.WALK_WEST);
 				if (player.isMoving()) {
-					//updateObjects(Globals.WEST);
 					timerListener.setMoving(true, Globals.WEST);
-					//camera.translate(-CAMERA_STEP_X,CAMERA_STEP_Y);
-					//camera.update();
 				}
 				input.releaseAllKeys();
 			} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
@@ -177,6 +167,11 @@ public class TheHub extends World {
 						objects.get(i).processInput(Globals.INTERACT);
 						break;
 					}
+				}
+				if (schrodinger.isTalking()) {
+					dialogBox = schrodinger.getDialogBox();
+					dialogBox.setVisible(true);
+					showDialog = true;
 				}
 				input.releaseAllKeys();
 			}

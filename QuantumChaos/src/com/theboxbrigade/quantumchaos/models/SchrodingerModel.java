@@ -26,9 +26,11 @@ public class SchrodingerModel extends CharacterModel {
 		return false;
 	}
 	
-	public void dialog() {
+	public void dialog(String line) {
+		System.out.println("Talking to Schrodinger");
 		talking = true;
-		dialog = Assets.Dialog.TALK_TO_SCHRODINGER_HUB_1;
+		dialog = line;
+		sync();
 	}
 
 	@Override

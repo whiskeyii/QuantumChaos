@@ -68,8 +68,7 @@ public class SchrodingerController extends ObjectController implements Interacta
 	
 	@Override
 	public void whenInteractedWith() {
-		// TODO Auto-generated method stub
-		
+		((SchrodingerModel)model).dialog(Assets.Dialog.TALK_TO_SCHRODINGER_HUB_1);
 	}
 	
 	public boolean isMoving() { return moving; }
