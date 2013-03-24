@@ -20,6 +20,7 @@ public class Assets {
 	public static Sprite greenBoxClosed, greenBoxOpen;
 	public static Sprite blueBoxClosed, blueBoxOpen;
 	public static Sprite redBoxClosed, redBoxOpen;
+	public static Sprite test; //test commit
 	
 	public static Sprite dialogBoxBG;
 	
