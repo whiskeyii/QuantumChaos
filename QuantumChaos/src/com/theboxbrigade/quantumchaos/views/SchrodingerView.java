@@ -12,11 +12,11 @@ public class SchrodingerView extends CharacterView {
 	private SpriteBatch spriteBatch = new SpriteBatch();
 	
 	@Override
-	public void update(int state, int facingDir) {
+	public void update(int state) {
 		this.currentState = state;
-		if (facingDir == 1) { // EAST
+		if (state == 1) { // EAST
 			schrodinger = Assets.schrodingerE;
-		} else if (facingDir == 2) { // SOUTH
+		} else if (state == 2) { // SOUTH
 			schrodinger = Assets.schrodingerS;
 		}
 		draw(schrodinger, Globals.GAME_WIDTH/4, Globals.GAME_HEIGHT/2);
@@ -29,12 +29,6 @@ public class SchrodingerView extends CharacterView {
 			schrodinger = Assets.schrodingerS;
 		}
 		draw(schrodinger, x, y);
-	}
-	
-	@Override
-	public void updateAnimation(int state, int facingDir) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public SpriteBatch getSpriteBatch() {

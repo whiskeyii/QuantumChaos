@@ -3,9 +3,15 @@ package com.theboxbrigade.quantumchaos.views;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.theboxbrigade.quantumchaos.general.AnimatedAssets;
 import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 
+/**
+ * View object for Player (Robert) - Handles the states that Robert
+ *   is currently in and draws the Sprite in the SpriteBatch.
+ * @author Jason
+ */
 public class PlayerView extends CharacterView {
 	private static final int CARRY = 5;
 	private static final int TELEPORT = 6;
@@ -15,27 +21,14 @@ public class PlayerView extends CharacterView {
 	private SpriteBatch spriteBatch = new SpriteBatch();
 	
 	@Override
-	public void update(int state, int facingDir) {
+	public void update(int state) {
 		// TODO Auto-generated method stub
 		this.currentState = state;
-		switch (facingDir) {
-			case 0: player = Assets.robertFaceN;
-					break;
-			case 1: player = Assets.robertFaceE;
-					break;
-			case 2: player = Assets.robertFaceS;
-					break;
-			case 3: player = Assets.robertFaceW;
-					break;
-		}
+		AnimatedAssets.setState(state);
+		player = AnimatedAssets.robertCurrentFrame;
 		draw(player, Globals.GAME_WIDTH/2, Globals.GAME_HEIGHT/2);
 	}
-	
-	@Override
-	public void updateAnimation(int state, int facingDir) {
-		// TODO Auto-generated method stub
-		this.currentState = state;
-	}
+
 	public SpriteBatch getSpriteBatch() {
 		return spriteBatch;
 	}

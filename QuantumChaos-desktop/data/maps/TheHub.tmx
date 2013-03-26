@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
  <tileset firstgid="1" name="Newton" tilewidth="128" tileheight="64">
-  <image source="TheHub.png" trans="ffffff" width="128" height="256"/>
+  <image source="TheHub.png" trans="ffffff" width="128" height="384"/>
   <tile id="0">
    <properties>
     <property name="color" value="grey"/>
@@ -29,7 +29,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYmBgYBrFVMWMWDALFCOL0VM/NoxPPzMU00I/zC8DpZ8e4TeQ8U8KBgDA7QHR
+   eJxjYmBgYBrFVMWMROLBrJ8Zikeq/oEOf0r0k4IBjOUBrQ==
   </data>
  </layer>
  <objectgroup name="Character Layer" width="16" height="16">

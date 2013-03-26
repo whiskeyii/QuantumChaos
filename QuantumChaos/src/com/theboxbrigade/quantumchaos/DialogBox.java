@@ -32,18 +32,20 @@ public class DialogBox {
 		this.text = text;
 		visible = false;
 		
-		if (text.length() > MAX_LINES * STR_BREAK) {
-			System.out.println("WARNING: Dialog Box string length too long! Clipping to 200 characters");
-			text = text.substring(0, 200);
-		}
-		
-		nLines = (int)Math.ceil(text.length() / 50.0f);
-		lines = new String[nLines];
-		for (int i = 0; i < nLines; i++) {
-			int start = i*STR_BREAK;
-			int end = (i+1)*STR_BREAK;
-			if (end > text.length()) end = text.length() - 1;
-			lines[i] = text.substring(start, end);
+		if (text != null) {
+			if (text.length() > MAX_LINES * STR_BREAK) {
+				System.out.println("WARNING: Dialog Box string length too long! Clipping to 200 characters");
+				text = text.substring(0, 200);
+			}
+			
+			nLines = (int)Math.ceil(text.length() / 50.0f);
+			lines = new String[nLines];
+			for (int i = 0; i < nLines; i++) {
+				int start = i*STR_BREAK;
+				int end = (i+1)*STR_BREAK;
+				if (end > text.length()) end = text.length();
+				lines[i] = text.substring(start, end);
+			}
 		}
 	}
 	
@@ -64,7 +66,7 @@ public class DialogBox {
 		for (int i = 0; i < nLines; i++) {
 			int start = i*STR_BREAK;
 			int end = (i+1)*STR_BREAK;
-			if (end > text.length()) end = text.length() - 1;
+			if (end > text.length()) end = text.length();
 			lines[i] = text.substring(start, end);
 		}
 	}

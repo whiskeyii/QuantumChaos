@@ -49,8 +49,9 @@ public class BoxController extends ObjectController implements Interactable {
 		this.openState = openState;
 	}
 	
-	public int isOpen() {
-		return openState;
+	public boolean isOpen() {
+		if (openState == 0) return true;
+		return false;
 	}
 	
 	public void translate(float x, float y) {

@@ -75,8 +75,10 @@ public class TileManager {
 					tiles[layer][col][row] = new Tile(layers[layer].getCell(col, nRows-1-row).getTile());
 					tiles[layer][col][row].setX(col);
 					tiles[layer][col][row].setY(row);
-					if (tiles[layer][col][row].getProperties().get("walkable").equals("true")) {
-						tiles[layer][col][row].setWalkable(true);
+					if (tiles[layer][col][row].getProperties().get("walkable") != null) {
+						if (tiles[layer][col][row].getProperties().get("walkable").equals("true")) {
+							tiles[layer][col][row].setWalkable(true);
+						}
 					}
 				}
 			}

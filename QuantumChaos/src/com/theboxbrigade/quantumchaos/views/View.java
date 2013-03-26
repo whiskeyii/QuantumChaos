@@ -8,8 +8,6 @@ public abstract class View {
 	
 	public abstract void update(int state);
 	
-	public abstract void updateAnimation(int state);
-	
 	public abstract void draw(Sprite region, float x, float y);
 	
 	public SpriteBatch getSpriteBatch() {

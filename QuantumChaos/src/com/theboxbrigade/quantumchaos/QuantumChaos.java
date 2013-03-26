@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
+import com.theboxbrigade.quantumchaos.general.AnimatedAssets;
 import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
@@ -27,6 +28,7 @@ public class QuantumChaos extends Game {
 	public void create() {
 		titleScreen = new TitleScreen();
 		Assets.load();
+		AnimatedAssets.load();
 		Gdx.input.setInputProcessor(input);
 		running = true;
 		setScreen(titleScreen);

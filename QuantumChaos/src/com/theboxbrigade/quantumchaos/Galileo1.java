@@ -18,28 +18,22 @@ import com.theboxbrigade.quantumchaos.controllers.PlayerController;
 import com.theboxbrigade.quantumchaos.controllers.SchrodingerController;
 import com.theboxbrigade.quantumchaos.general.AnimationTimerListener;
 import com.theboxbrigade.quantumchaos.general.Assets;
-import com.theboxbrigade.quantumchaos.general.DialogManager;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
 
-public class TheHub extends World {
+public class Galileo1 extends World {
 	private static final float CAMERA_STEP_X = 2f;
 	private static final float CAMERA_STEP_Y = 1f;
 	private static final int TIMERMSECS = 60;
-	protected final String mapPath = "data/maps/";
-	protected final String mapName = "TheHub";
-	protected final String dialogPath = "data/dialog/";
-	protected final String dialogName = "TheHub.txt";
+	protected final String path = "data/maps/";
+	protected final String mapName = "Galileo1";
 	protected TileManager tileManager;
-	protected DialogManager dialogManager;
 
 	protected Timer timer;
 	protected AnimationTimerListener timerListener;
 	
 	protected Array<ObjectController> objects;
 	protected PlayerController player;
-	protected SchrodingerController schrodinger;
-	protected BoxController redBox, greenBox, blueBox;
 	
 	// TEST
 	protected boolean showDialog;
@@ -47,7 +41,7 @@ public class TheHub extends World {
 	
 	@Override
 	public void create() {
-		System.out.println("I AM HERE - THE HUB!");
+		System.out.println("I AM HERE - GALILEO-1!");
 		float w = Globals.GAME_WIDTH;
 		float h = Globals.GAME_HEIGHT;
 		
@@ -61,9 +55,9 @@ public class TheHub extends World {
 		
 		assetManager = new AssetManager();
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-		assetManager.load(mapPath + mapName + ".tmx", TiledMap.class);
+		assetManager.load(path + mapName + ".tmx", TiledMap.class);
 		assetManager.finishLoading();
-		tileMap = assetManager.get(mapPath + mapName + ".tmx");
+		tileMap = assetManager.get(path + mapName + ".tmx");
 		tileMapRenderer = new IsometricTiledMapRenderer(tileMap, 1f / 32f);
 		
 		// Read the tileMap
@@ -79,32 +73,7 @@ public class TheHub extends World {
 		
 		// Create the Player object;
 		player = new PlayerController(tileManager);
-		
-		// Create the Schrodinger object;
-		schrodinger = new SchrodingerController(tileManager);
-		objects.add(schrodinger);
-		timerListener.addObject(schrodinger);
-		
-		// Create boxes
-		redBox = new BoxController(tileManager,0);
-		greenBox = new BoxController(tileManager,1);
-		blueBox = new BoxController(tileManager,2);
-		objects.add(redBox);
-		objects.add(greenBox);
-		objects.add(blueBox);
-		timerListener.addObject(redBox);
-		timerListener.addObject(greenBox);
-		timerListener.addObject(blueBox);
-		redBox.setPosition(tileManager.getTile(10, 14));
-		redBox.setScreenPosition(Globals.TILE_WIDTH*1.5f, Globals.TILE_HEIGHT*8.5f);
-		greenBox.setPosition(tileManager.getTile(10, 5));
-		greenBox.setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
-		blueBox.setPosition(tileManager.getTile(14, 10));
-		blueBox.setScreenPosition(Globals.TILE_WIDTH*6.25f, Globals.TILE_HEIGHT*8.5f);
-		
-		// Dialog Manager
-		dialogManager = new DialogManager();
-		dialogManager.loadFile(dialogPath + dialogName);
+
 	}
 
 	@Override
@@ -143,8 +112,6 @@ public class TheHub extends World {
 	@Override
 	public void parseInput(Input input) {
 		if (!timerListener.blockInput) {
-			if (!player.getTileInFrontOfPlayer().equals(schrodinger.getPosition().getTile()))
-				schrodinger.setTalking(false);
 			if (input.buttons[Input.WALK_NORTH] && !input.oldButtons[Input.WALK_NORTH]) {
 				player.processInput(Input.WALK_NORTH);
 				if (player.isMoving()) {
@@ -178,21 +145,7 @@ public class TheHub extends World {
 						break;
 					}
 				}
-				input.releaseAllKeys();
-			}
-			if (schrodinger.isTalking()) {
-				dialogBox = schrodinger.getDialogBox();
-				dialogBox.setText(dialogManager.getString());
-				dialogBox.setVisible(true);
-				showDialog = true;
-			} else {
-				if (dialogBox != null) {
-					dialogBox.setVisible(false);
-					showDialog = false;
-				}
-			}
-			if (redBox.isOpen() || greenBox.isOpen() || blueBox.isOpen()) {
-				player.processGameState(GameStates.BOX_OPEN);
+				//input.releaseAllKeys();
 			}
 		}
 	}
@@ -208,9 +161,5 @@ public class TheHub extends World {
 			if (objects.get(i) == object) return objects.get(i);
 		}
 		return null;
-	}
-	
-	public class GameStates {
-		public static final int BOX_OPEN = 0;
 	}
 }

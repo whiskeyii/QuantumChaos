@@ -73,8 +73,4 @@ public class Assets {
 		FileHandle imageHandle = Gdx.files.internal(imageFile);
 		return new BitmapFont(fontHandle, imageHandle, flipY);
 	}
-	
-	public class Dialog {
-		public static final String TALK_TO_SCHRODINGER_HUB_1 = "Hello Robert! How are you today?";
-	}
 }

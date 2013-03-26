@@ -5,6 +5,7 @@ import com.theboxbrigade.quantumchaos.DialogBox;
 import com.theboxbrigade.quantumchaos.Position;
 import com.theboxbrigade.quantumchaos.TileManager;
 import com.theboxbrigade.quantumchaos.general.Assets;
+import com.theboxbrigade.quantumchaos.general.Dialog;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.models.SchrodingerModel;
 import com.theboxbrigade.quantumchaos.views.SchrodingerView;
@@ -68,7 +69,7 @@ public class SchrodingerController extends ObjectController implements Interacta
 	
 	@Override
 	public void whenInteractedWith() {
-		((SchrodingerModel)model).dialog(Assets.Dialog.TALK_TO_SCHRODINGER_HUB_1);
+		((SchrodingerModel)model).dialog(Dialog.TEST_DIALOG);
 	}
 	
 	public boolean isMoving() { return moving; }
@@ -80,7 +81,7 @@ public class SchrodingerController extends ObjectController implements Interacta
 	public boolean isTalking() { return talking; }
 	public void setTalking(boolean talking) { this.talking = talking; }
 	public DialogBox getDialogBox() {
-		return new DialogBox(Assets.schrodingerE, dialogText);
+		return new DialogBox(Assets.schrodingerE, null);
 	}
 	
 	@Override

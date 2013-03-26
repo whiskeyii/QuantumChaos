@@ -21,8 +21,7 @@ public class BoxView extends View {
 	
 	@Override
 	public void update(int state) {
-		// TODO Auto-generated method stub
-		
+		update(0,0,state);
 	}
 	
 	public void update(float x, float y, int state) {
@@ -38,12 +37,6 @@ public class BoxView extends View {
 						break;
 		}
 		draw(box, x, y);
-	}
-	
-	@Override
-	public void updateAnimation(int state) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public SpriteBatch getSpriteBatch() {
