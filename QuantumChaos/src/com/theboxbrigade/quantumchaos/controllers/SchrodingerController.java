@@ -1,20 +1,26 @@
 package com.theboxbrigade.quantumchaos.controllers;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.DialogBox;
+import com.theboxbrigade.quantumchaos.Obstructing;
 import com.theboxbrigade.quantumchaos.Position;
+import com.theboxbrigade.quantumchaos.Tile;
 import com.theboxbrigade.quantumchaos.TileManager;
 import com.theboxbrigade.quantumchaos.general.Assets;
-import com.theboxbrigade.quantumchaos.general.Dialog;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.models.SchrodingerModel;
 import com.theboxbrigade.quantumchaos.views.SchrodingerView;
 
-public class SchrodingerController extends ObjectController implements Interactable {
+public class SchrodingerController extends ObjectController implements Interactable, Obstructing {
+	public static final int IDLE = 0;
+	public static final int INIT_TALKING = 1;
+	public static final int TALKING = 2;
+	public static final int WALKING = 3;
+	
 	private Position position;
 	protected int facingDir = Globals.SOUTH;
-	protected float x = Globals.GAME_WIDTH/2;
-	protected float y = Globals.TILE_HEIGHT*14.0f;
+	protected float x;
+	protected float y;
+	public int state;
 	protected boolean moving;
 	protected String dialogText;
 	protected boolean talking;
@@ -23,15 +29,17 @@ public class SchrodingerController extends ObjectController implements Interacta
 	public SchrodingerController(TileManager tileManager) {
 		this.tileManager = tileManager;
 		position = new Position(this.tileManager);
-		position.setTile(tileManager.getTile(7, 7));
-		tileManager.getTile(position.getX(), position.getY()).setObstructed(true);
 		
 		model = new SchrodingerModel(this);
 		view = new SchrodingerView();
 	}
 	
-	public void setPosition(Position p) {
-		position.setTile(p.getTile());
+	public void setPosition(Tile tile) {
+		tileManager.getTile(position.getX(), position.getY()).setObstructed(false);
+		tileManager.getTile(position.getX(), position.getY()).setObstructing(null);
+		position.setTile(tile);
+		tileManager.getTile(position.getX(), position.getY()).setObstructed(true);
+		tileManager.getTile(position.getX(), position.getY()).setObstructing(this);
 	}
 	
 	public Position getPosition() {
@@ -46,6 +54,16 @@ public class SchrodingerController extends ObjectController implements Interacta
 		return facingDir;
 	}
 	
+	public void setState(int state) {
+		this.state = state;
+	}
+	
+	public void setScreenPosition(float x, float y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	@Override
 	public void translate(float x, float y) {
 		this.x += x;
 		this.y += y;
@@ -62,21 +80,16 @@ public class SchrodingerController extends ObjectController implements Interacta
 			translate((float)Globals.OBJ_TRANSLATION_X, (float)Globals.OBJ_TRANSLATION_Y);
 		} else if (input == Globals.WEST) {
 			translate((float)Globals.OBJ_TRANSLATION_X, -(float)Globals.OBJ_TRANSLATION_Y);
-		} else if (input == Globals.INTERACT) {
-			whenInteractedWith();
 		}
 	}
 	
 	@Override
 	public void whenInteractedWith() {
-		((SchrodingerModel)model).dialog(Dialog.TEST_DIALOG);
+		((SchrodingerModel)model).talk();
 	}
 	
 	public boolean isMoving() { return moving; }
 	public void setMoving(boolean moving) { this.moving = moving; }
-	
-	public String getDialogText() { return dialogText; }
-	public void setDialogText(String dialogText) { this.dialogText = dialogText; }
 	
 	public boolean isTalking() { return talking; }
 	public void setTalking(boolean talking) { this.talking = talking; }
@@ -85,20 +98,23 @@ public class SchrodingerController extends ObjectController implements Interacta
 	}
 	
 	@Override
-	public void update() {
+	public boolean update(float delta) {
 		updateView();
+		return false;
 	}
 
 	@Override
 	protected void updateView() {
-		// TODO Auto-generated method stub
-		//((SchrodingerView)view).update(0, facingDir);
 		((SchrodingerView)view).update(x, y, facingDir);
 	}
 
 	@Override
 	public boolean equals(ObjectController other) {
-		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public boolean isInteractable() {
+		return true;
 	}
 }

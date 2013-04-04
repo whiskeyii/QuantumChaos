@@ -17,13 +17,16 @@ public abstract class World {
 	public IsometricTiledMapRenderer tileMapRenderer;
 	protected AssetManager assetManager;
 	
+	public boolean readyToLeave = false;
+	public int nextWorld = -1;
+	
 	public World() {
 		create();
 	}
 	
 	public abstract void create();
 	
-	public abstract void render();
+	public abstract void render(float delta);
 	
 	public SpriteBatch getSpriteBatch() {
 		return spriteBatch;
@@ -38,4 +41,8 @@ public abstract class World {
 	}
 	
 	public abstract void parseInput(Input input);
+	
+	public int nextWorld() { return nextWorld; }
+	
+	public abstract void dispose();
 }

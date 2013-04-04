@@ -19,4 +19,17 @@ public class InteractionManager {
 	public void setInteractingTile(Tile t) {
 		this.interactingTile = t;
 	}
+	
+	public void interact() {
+		if (interactor != null && playerTile != null && interactingTile != null) {
+			interactor.whenInteractedWith();
+		}
+	}
+	
+	public void interact(Tile playerTile, Tile interactingTile, Interactable interactor) {
+		setPlayerTile(playerTile);
+		setInteractingTile(interactingTile);
+		setInteractor(interactor);
+		interact();
+	}
 }

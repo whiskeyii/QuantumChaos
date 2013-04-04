@@ -17,6 +17,10 @@ public class Input implements InputProcessor {
 	
 	public static final int DPAD_UP = 7;
 	public static final int DPAD_DOWN = 8;
+	public static final int DPAD_LEFT = 9;
+	public static final int DPAD_RIGHT = 10;
+	
+	public static final int AFFIRM = 11;
 	
 	public boolean[] buttons = new boolean[64];
 	public boolean[] oldButtons = new boolean[64];
@@ -29,12 +33,15 @@ public class Input implements InputProcessor {
 		if (key == Keys.S) button = WALK_SOUTH;
 		if (key == Keys.A) button = WALK_WEST;
 		
-		if (key == Keys.E || key == Keys.ENTER) button = INTERACT;
+		if (key == Keys.E) button = INTERACT;
 		if (key == Keys.SPACE) button = ATTACK;
 		if (key == Keys.ESCAPE) button = ESCAPE;
+		if (key == Keys.ENTER) button = AFFIRM;
 		
 		if (key == Keys.DPAD_UP) button = DPAD_UP;
 		if (key == Keys.DPAD_DOWN) button = DPAD_DOWN;
+		if (key == Keys.DPAD_LEFT) button = DPAD_LEFT;
+		if (key == Keys.DPAD_RIGHT) button = DPAD_RIGHT;
 		
 		if (button >= 0) buttons[button] = down;
 	}

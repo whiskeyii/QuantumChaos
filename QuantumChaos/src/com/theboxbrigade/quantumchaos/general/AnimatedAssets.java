@@ -3,11 +3,9 @@ package com.theboxbrigade.quantumchaos.general;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.theboxbrigade.quantumchaos.controllers.PlayerController;
 
 public class AnimatedAssets {
-	private static final int FRAME_COLS = 4;
-	private static final int FRAME_ROWS = 1;
-	
 	private static final int FRAME_WIDTH = 64;
 	private static final int FRAME_HEIGHT = 128;
 	public static int numWalkingFrames = 5;
@@ -17,7 +15,6 @@ public class AnimatedAssets {
 	private static Sprite[] robertWalkWestFrames;
 	private static Sprite[] robertWalkEastFrames;
 	private static Sprite[] robertWalkSouthFrames;
-	private static Sprite[] robertTeleportFrames;
 	public static int robertCurrentFrameNum = -1;
 	public static Sprite robertCurrentFrame;
 
@@ -26,17 +23,12 @@ public class AnimatedAssets {
 		robertWalkWestFrames = new Sprite[numWalkingFrames];
 		robertWalkEastFrames = new Sprite[numWalkingFrames];
 		robertWalkSouthFrames = new Sprite[numWalkingFrames];
-		robertTeleportFrames = new Sprite[numTeleportingFrames];
 		for (int i = 0; i < numWalkingFrames; i++) {
 			robertWalkNorthFrames[i] = load(robertPath, i*FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT, false);
 			robertWalkWestFrames[i] = load(robertPath, i*FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT, false);
 			robertWalkEastFrames[i] = load(robertPath, i*FRAME_WIDTH, 2*FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT, false);
 			robertWalkSouthFrames[i] = load(robertPath, i*FRAME_WIDTH, 3*FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT, false);
 		}
-		robertTeleportFrames[0] = robertWalkNorthFrames[0];
-		robertTeleportFrames[1] = robertWalkEastFrames[0];
-		robertTeleportFrames[2] = robertWalkSouthFrames[0];
-		robertTeleportFrames[3] = robertWalkWestFrames[0];
 		robertCurrentFrameNum = 0;
 		robertCurrentFrame = robertWalkNorthFrames[robertCurrentFrameNum];
 	}
@@ -52,23 +44,30 @@ public class AnimatedAssets {
 		setCurrentFrame(state);
 	}
 	
+	public static Sprite getFrame(int state, int frame) {
+		switch (state) {
+			case Globals.NORTH: 		frame %= numWalkingFrames;	
+										return robertWalkNorthFrames[frame];
+			case Globals.EAST:			frame %= numWalkingFrames;
+										return robertWalkEastFrames[frame];
+			case Globals.SOUTH:			frame %= numWalkingFrames;
+										return robertWalkSouthFrames[frame];
+			case Globals.WEST:			frame %= numWalkingFrames;
+										return robertWalkWestFrames[frame];
+		}
+		return robertCurrentFrame;
+	}
+	
 	private static void setCurrentFrame(int state) {
 		switch (state) {
-			// NORTH
-			case 0: robertCurrentFrame = robertWalkNorthFrames[robertCurrentFrameNum];
-					break;
-			// EAST
-			case 1: robertCurrentFrame = robertWalkEastFrames[robertCurrentFrameNum];
-					break;
-			// SOUTH
-			case 2: robertCurrentFrame = robertWalkSouthFrames[robertCurrentFrameNum];
-					break;
-			// WEST
-			case 3: robertCurrentFrame = robertWalkWestFrames[robertCurrentFrameNum];
-					break;
-			// TELEPORT
-			case 4: robertCurrentFrame = robertTeleportFrames[robertCurrentFrameNum];
-					break;
+			case Globals.NORTH: robertCurrentFrame = robertWalkNorthFrames[robertCurrentFrameNum];
+								break;
+			case Globals.EAST: 	robertCurrentFrame = robertWalkEastFrames[robertCurrentFrameNum];
+								break;
+			case Globals.SOUTH: robertCurrentFrame = robertWalkSouthFrames[robertCurrentFrameNum];
+								break;
+			case Globals.WEST: 	robertCurrentFrame = robertWalkWestFrames[robertCurrentFrameNum];
+								break;
 		}
 	}
 	

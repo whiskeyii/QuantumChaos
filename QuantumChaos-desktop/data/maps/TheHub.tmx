@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
  <tileset firstgid="1" name="Newton" tilewidth="128" tileheight="64">
-  <image source="TheHub.png" trans="ffffff" width="128" height="384"/>
+  <image source="TheHub.png" trans="ffffff" width="1024" height="1024"/>
   <tile id="0">
    <properties>
     <property name="color" value="grey"/>
@@ -29,13 +29,12 @@
  </tileset>
  <layer name="Tile Layer 1" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYmBgYBrFVMWMROLBrJ8Zikeq/oEOf0r0k4IBjOUBrQ==
+   eJxjYmBgYBrFVMWMRGJc+gWRMKX68ZlBS/2MA2w/Jfopjb+B1k8KBgDdIwL9
   </data>
  </layer>
- <objectgroup name="Character Layer" width="16" height="16">
-  <object x="421" y="356"/>
-  <object x="409" y="331"/>
-  <object x="414" y="344"/>
-  <object x="322" y="429"/>
- </objectgroup>
+ <layer name="SuperComputer" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFMMBCgV5mKM0DpUXJMIMbSotAaVkS9HJBaWEoLQOlVUkwQwhKS0NpFRL0woAUlFYmQy8MKEFpbQrM0ILSxhSYYUSB3qECAM89Ai0=
+  </data>
+ </layer>
 </map>

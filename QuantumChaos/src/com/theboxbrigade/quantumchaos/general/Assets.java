@@ -1,6 +1,8 @@
 package com.theboxbrigade.quantumchaos.general;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,11 +22,19 @@ public class Assets {
 	public static Sprite greenBoxClosed, greenBoxOpen;
 	public static Sprite blueBoxClosed, blueBoxOpen;
 	public static Sprite redBoxClosed, redBoxOpen;
-	public static Sprite test; //test commit
 	
 	public static Sprite dialogBoxBG;
 	
+	// planets
+	public static Sprite SUN, MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE;
+	
 	public static BitmapFont font;
+	
+	/*********************/
+	public static Sound chestOpen;
+	public static Sound step;
+	public static Sound walkIntoWall;
+	public static Music theHubMusic;
 	
 	public static void load() {
 		// FONT(S)
@@ -55,6 +65,28 @@ public class Assets {
 		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
 		
 		// SOUNDS
+		chestOpen = loadSound("data/sounds/chest open.mp3");
+		walkIntoWall = loadSound("data/sounds/robert run into.mp3");
+		step = loadSound("data/sounds/robert step.mp3");
+		
+		
+		// MUSIC
+		theHubMusic = loadMusic("data/sounds/hub world theme.mp3");
+	}
+	
+	public static void load(int world) {
+		switch (world) {
+			case Globals.GALILEO1: 	SUN = load("data/images/planets.png", 0, 0, 256, 256, false);
+									MERCURY = load("data/images/planets.png", 257, 0, 96, 96, false);
+									VENUS = load("data/images/planets.png", 257, 96, 96, 96, false);
+									EARTH = load("data/images/planets.png", 353, 0, 96, 96, false);
+									MARS = load("data/images/planets.png", 353, 96, 0, 0, false);
+									JUPITER = load("data/images/planets.png", 449, 0, 128, 128, false);
+									SATURN = load("data/images/planets.png", 449, 128, 128, 176, false);
+									URANUS = load("data/images/planets.png", 577, 0, 128, 215, false);
+									NEPTUNE = load("data/images/planets.png", 625, 128, 128, 128, false);
+									break;
+		}
 	}
 	
 	public static Sprite load(String name, int width, int height) {
@@ -72,5 +104,17 @@ public class Assets {
 		FileHandle fontHandle = Gdx.files.internal(fontFile);
 		FileHandle imageHandle = Gdx.files.internal(imageFile);
 		return new BitmapFont(fontHandle, imageHandle, flipY);
+	}
+	
+	public static Sound loadSound(String soundFile) {
+		FileHandle soundHandle = Gdx.files.internal(soundFile);
+		return Gdx.audio.newSound(soundHandle);
+	}
+	
+	public static Music loadMusic(String musicFile) {
+		FileHandle musicHandle = Gdx.files.internal(musicFile);
+		Music out = Gdx.audio.newMusic(musicHandle);
+		out.setVolume(0.4f);
+		return out;
 	}
 }

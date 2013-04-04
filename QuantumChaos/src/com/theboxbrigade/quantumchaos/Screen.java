@@ -45,7 +45,7 @@ public abstract class Screen {
 		spriteBatch.draw(region, x, y, width, region.getRegionHeight());
 	}
 	
-	public abstract void render();
+	public abstract void render(float delta);
 	
 	public void tick(Input input) {}
 }

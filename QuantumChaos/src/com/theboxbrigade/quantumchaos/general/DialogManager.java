@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class DialogManager {
 	private Array<String> dialog;
 	private Iterator it;
-	private int numStrings;
 	private String currentString;
 	
 	public DialogManager() {
@@ -37,8 +36,10 @@ public class DialogManager {
 	}
 	
 	public String getString() {
-		currentString = (String)it.next();
-		if (currentString != null) return currentString;
+		if (it.hasNext()) {
+			currentString = (String)it.next();
+			return currentString;
+		}
 		return null;
 	}
 }

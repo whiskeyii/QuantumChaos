@@ -40,6 +40,8 @@ public abstract class ObjectController implements Controller {
 
 	protected abstract void updateView();
 	
+	public abstract void translate(float x, float y);
+	
 	public abstract void processInput(int input);
 	
 	public abstract boolean equals(ObjectController other);

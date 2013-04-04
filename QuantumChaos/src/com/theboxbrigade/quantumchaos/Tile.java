@@ -3,6 +3,7 @@ package com.theboxbrigade.quantumchaos;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.theboxbrigade.quantumchaos.controllers.Interactable;
 
 public class Tile implements TiledMapTile {
 	private static final int TYPE_NULL = 0;
@@ -18,6 +19,7 @@ public class Tile implements TiledMapTile {
 	protected int yIndex;
 	protected boolean walkable;
 	protected boolean obstructed;
+	protected Obstructing obstructing;
 	protected MapProperties properties;
 	protected TextureRegion textureRegion;
 	
@@ -69,6 +71,18 @@ public class Tile implements TiledMapTile {
 	public void setObstructed(boolean obstructed) {
 		this.obstructed = obstructed;
 	}
+	
+	public void setObstructing(Obstructing obs) {
+		this.obstructing = obs;
+	}
+	
+	public Obstructing getObstructing() {
+		return obstructing;
+	}
+	
+	public boolean isObstructingInteractable() {
+		return ((Interactable)obstructing).isInteractable();
+	}
 
 	public int getId() {
 		return id;
@@ -97,8 +111,10 @@ public class Tile implements TiledMapTile {
 	}
 	
 	public boolean equals(Tile tile) {
-		if (this.id == tile.id) {
-			return true;
+		if (tile != null) {
+			if (this.id == tile.id) {
+				return true;
+			}
 		}
 		return false;
 	}

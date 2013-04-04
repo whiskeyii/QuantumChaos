@@ -1,10 +1,15 @@
 package com.theboxbrigade.quantumchaos.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.theboxbrigade.quantumchaos.Carryable;
+import com.theboxbrigade.quantumchaos.Obstructing;
 import com.theboxbrigade.quantumchaos.Position;
 import com.theboxbrigade.quantumchaos.Tile;
 import com.theboxbrigade.quantumchaos.TileManager;
+import com.theboxbrigade.quantumchaos.general.AnimatedAssets;
 import com.theboxbrigade.quantumchaos.general.Globals;
+import com.theboxbrigade.quantumchaos.general.Input;
 import com.theboxbrigade.quantumchaos.models.Model;
 import com.theboxbrigade.quantumchaos.models.PlayerModel;
 import com.theboxbrigade.quantumchaos.views.PlayerView;
@@ -12,24 +17,31 @@ import com.theboxbrigade.quantumchaos.views.View;
 
 /**
  * Create this object in a World to get the MVC structure for a Player object (Robert)
- * @Additional Also creates PlayerModel, PlayerView objects
+ * <br />
+ * Also creates PlayerModel, PlayerView objects
  * @author Jason
  */
-public class PlayerController extends ObjectController {
-	protected int maxHP = 4;					// Maximum hit points
-	protected int currentHP = 4;				// Current hit points
-	protected Position position;				// Robert's current tile position
-	protected int state = Globals.NORTH;		// Robert's current state
-	protected int keyPressed;					// Input processing: which key?
-
-	// What is Robert currently doing?
-	protected boolean moving;
-	protected boolean teleporting;
-	protected boolean carrying;
-	protected boolean sliding;
-	protected boolean attacking;
-	protected boolean hit;
-	protected boolean dead;
+public class PlayerController extends ObjectController implements Obstructing {
+	public static final int IDLE = 10;
+	public static final int WALKING = 11;
+	public static final int INTERACTING = 12;
+	public static final int TELEPORTING = 13;
+	public static final int ATTACKING = 14;
+	public static final int HIT = 15;
+	public static final int DEAD = 16;
+	public static final int SLIDING = 17;
+	
+	protected int maxHP = 4;
+	protected int currentHP = 4;
+	protected Position position;
+	public int state = IDLE;
+	protected int deltaState = 0;
+	protected int stateFrame = 0;
+	protected Interactable interactingWith;
+	protected int facing = Globals.NORTH;
+	protected boolean moved = false;
+	protected Carryable itemCarried;
+	protected boolean carrying = false;
 	
 	protected TileManager tileManager;
 	
@@ -41,119 +53,87 @@ public class PlayerController extends ObjectController {
 		view = new PlayerView();
 	}
 	
-	public void setHP(int hp) {
-		this.currentHP = hp;
-	}
-	
-	public int getHP() {
-		return currentHP;
-	}
+	public void setHP(int hp) { this.currentHP = hp; }
+	public int getHP() { return currentHP; }
 	
 	public void setPosition(Position p) {
 		position.setTile(p.getTile());
 	}
-	
-	public Position getPosition() {
-		return position;
-	}
+	public Position getPosition() { return position; }
 	
 	/** Looks forward one Tile in the direction Robert is facing and returns that tile
 	 * @return Tile: The tile in front of Robert (null if he's at an edge of the tile map)
 	 */
 	public Tile getTileInFrontOfPlayer() {
-		switch (state) {
-			case 0: return tileManager.getTile(position.getX(), position.getY()-1);
-			case 1: return tileManager.getTile(position.getX()+1, position.getY());
-			case 2: return tileManager.getTile(position.getX(), position.getY()+1);
-			case 3: return tileManager.getTile(position.getX()-1, position.getY());
+		switch (facing) {
+			case Globals.NORTH: return tileManager.getTile(position.getX(), position.getY()-1);
+			case Globals.EAST: 	return tileManager.getTile(position.getX()+1, position.getY());
+			case Globals.SOUTH: return tileManager.getTile(position.getX(), position.getY()+1);
+			case Globals.WEST: 	return tileManager.getTile(position.getX()-1, position.getY());
 		}
 		return null;
 	}
 	
-	public void setState(int state) {
-		this.state = state;
-	}
-	
-	public int state() {
-		return state;
-	}
+	public void setState(int state) { this.state = state; }
+	public int getStateFrame() { return stateFrame; }
+	public void resetState() { stateFrame = 0; }
+	public void setFacing(int facing) { this.facing = facing; }
+	public int getFacing() { return facing; }
+	public void setInteractable(Interactable interactingWith) { this.interactingWith = interactingWith; }
+	public Interactable getInteractable() { return interactingWith; }
+	public void setCarrying(boolean carrying) { this.carrying = carrying; }
+	public boolean isCarrying() { return carrying; }
 	
 	@Override
 	public void processInput(int keyPressed) {
 		switch (keyPressed) {
-			// NORTH
-			case 0:	if (state == Globals.NORTH) {
-						((PlayerModel)model).move(Globals.NORTH);
-					} else {
-						((PlayerModel)model).face(Globals.NORTH);
-					}
-					break;
-			// EAST
-			case 1:	if (state == Globals.EAST) {
-						((PlayerModel)model).move(Globals.EAST);
-					} else {
-						((PlayerModel)model).face(Globals.EAST);
-					}
-					break;
-			// SOUTH
-			case 2:	if (state == Globals.SOUTH) {
-						((PlayerModel)model).move(Globals.SOUTH);
-					} else {
-						((PlayerModel)model).face(Globals.SOUTH);
-					}
-					break;
-			// WEST
-			case 3:	if (state == Globals.WEST) {
-						((PlayerModel)model).move(Globals.WEST);
-					} else {
-						((PlayerModel)model).face(Globals.WEST);
-					}
-					break;
+			case Input.WALK_NORTH: 	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.NORTH);
+									break;
+			case Input.WALK_EAST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.EAST);
+									break;
+			case Input.WALK_SOUTH:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.SOUTH);
+									break;
+			case Input.WALK_WEST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.WEST);
+									break;
+			case Input.INTERACT:	((PlayerModel)model).interactWith(interactingWith);
+									break;
 		}
+		System.out.println("State: " + state);
+		System.out.println(position);
 	}
 	
-	public void processGameState(int state) {
-		final int BOX_OPEN = 4;
-		
-		switch (state) {
-			case BOX_OPEN: 	((PlayerModel)model).teleport();
-							break;
-		}
-	}
-	
-	public boolean isMoving() { return moving; }
-	public void setMoving(boolean moving) { this.moving = moving; }
-	
-	public boolean isTeleporting() { return teleporting; }
-	public void setTeleporting(boolean teleporting) { this.teleporting = teleporting; }
-	
-	public boolean isCarrying() { return carrying; }
-	public void setCarrying(boolean carrying) { this.carrying = carrying; }
-	
-	public boolean isSliding() { return sliding; }
-	public void setSliding(boolean sliding) {this.sliding = sliding; }
-	
-	public boolean isAttacking() { return attacking; }
-	public void setAttacking(boolean attacking) { this.attacking = attacking; }
-	
-	public boolean isHit() { return hit; }
-	public void setHit(boolean hit) { this.hit = hit; }
-	
-	public boolean isDead() { return dead; }
-	public void setDead(boolean dead) { this.dead = dead; }
-	
+	/**
+	 * @return advanceAnim: 'true' if advancing to the next animation frame
+	 * If this returns true, the frame advanced on this call.
+	 */
 	@Override
-	public void update() {
+	public boolean update(float delta) {
+		boolean advanceAnim = false;
+		if (++deltaState > 2 && moved) {
+			stateFrame++;
+			deltaState = 0;
+			advanceAnim = true;
+		} else if (!moved) state = IDLE;
+		if (state == WALKING && stateFrame >= AnimatedAssets.numWalkingFrames) {
+			state = IDLE;
+			resetState();
+		}
 		updateView();
+		return advanceAnim;
+		//return true;
 	}
 	
 	@Override
 	protected void updateView() {
-		((PlayerView)view).update(state);
+		((PlayerView)view).update(state, facing, stateFrame);
 	}
 	
 	@Override
 	public boolean equals(ObjectController other) {
 		return false;
+	}
+
+	@Override
+	public void translate(float x, float y) {
 	}
 }

@@ -7,7 +7,7 @@ public class MainMenuScreen extends Screen {
 	private int time = 0;
 	
 	@Override
-	public void render() {
+	public void render(float delta) {
 		// Draw the logo
 		spriteBatch.begin();
 		draw(Assets.logo, 0, 0);

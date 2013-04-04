@@ -1,7 +1,9 @@
 package com.theboxbrigade.quantumchaos.models;
 
 import com.theboxbrigade.quantumchaos.Carryable;
+import com.theboxbrigade.quantumchaos.controllers.Interactable;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
+import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 
 /**
@@ -13,8 +15,9 @@ import com.theboxbrigade.quantumchaos.general.Globals;
 public class PlayerModel extends CharacterModel {
 	protected Carryable itemCarried;
 	protected int currentHP;
+	protected int oldState;
+	protected int state;
 	protected int facingDir;
-	protected boolean moving, teleporting;
 	
 	public PlayerModel(PlayerController controller) {
 		this.controller = controller;
@@ -22,36 +25,45 @@ public class PlayerModel extends CharacterModel {
 
 	@Override
 	public void face(int direction) {
-		// TODO Auto-generated method stub
+		oldState = state;
 		facingDir = direction;
-		moving = false;
+		state = PlayerController.IDLE;
 		sync();
 	}
 
 	@Override
 	public boolean move(int direction) {
-		moving = true;
+		face(direction);
+		oldState = state;
+		state = PlayerController.WALKING;
+		boolean moved = false;
 		switch (direction) {
-			// NORTH
-			case 0: moving = ((PlayerController)controller).getPosition().shiftVerticallyBy(-1,true);
-					break;
-			// EAST
-			case 1: moving = ((PlayerController)controller).getPosition().shiftHorizontallyBy(1,true);
-					break;
-			// SOUTH
-			case 2: moving = ((PlayerController)controller).getPosition().shiftVerticallyBy(1,true);
-					break;
-			// WEST
-			case 3: moving = ((PlayerController)controller).getPosition().shiftHorizontallyBy(-1,true);
-					break;
+			case Globals.NORTH: moved = ((PlayerController)controller).getPosition().shiftVerticallyBy(-1,true);
+								break;
+			case Globals.EAST:	moved = ((PlayerController)controller).getPosition().shiftHorizontallyBy(1,true);
+								break;
+			case Globals.SOUTH: moved = ((PlayerController)controller).getPosition().shiftVerticallyBy(1,true);
+								break;
+			case Globals.WEST: 	moved = ((PlayerController)controller).getPosition().shiftHorizontallyBy(-1,true);
+								break;
 		}
-		System.out.println(((PlayerController)controller).getPosition());
 		sync();
-		return moving;
+		if (!moved) Assets.walkIntoWall.play();
+		else Assets.step.play();
+		return moved;
+	}
+	
+	public void interactWith(Interactable interactable) {
+		oldState = state;
+		state = PlayerController.INTERACTING;
+		interactable.whenInteractedWith();
+		sync();
 	}
 	
 	public void teleport() {
-		this.teleporting = true;
+		oldState = state;
+		state = PlayerController.TELEPORTING;
+		sync();
 	}
 	
 	public void carry(Carryable itemCarried) {
@@ -65,28 +77,25 @@ public class PlayerModel extends CharacterModel {
 	}
 	
 	public void attack() {
-		// TODO: Attack logic
-		System.out.println("Attack!");
-		((PlayerController)controller).setAttacking(true);
+		oldState = state;
+		state = PlayerController.ATTACKING;
 	}
 	
 	public void hit() {
-		// TODO: Hit logic
-		System.out.println("Hit!");
-		((PlayerController)controller).setHit(true);
+		oldState = state;
+		state = PlayerController.HIT;
 	}
 	
 	public void die() {
-		// TODO: Die logic
-		System.out.println("Die!");
-		((PlayerController)controller).setDead(true);
+		oldState = state;
+		state = PlayerController.DEAD;
 	}
 
 	@Override
 	protected void sync() {
 		((PlayerController)controller).setHP(currentHP);
-		((PlayerController)controller).setState(facingDir);
-		((PlayerController)controller).setMoving(moving);
-		((PlayerController)controller).setTeleporting(teleporting);
+		((PlayerController)controller).setState(state);
+		if (oldState != state) ((PlayerController)controller).resetState();
+		((PlayerController)controller).setFacing(facingDir);
 	}
 }

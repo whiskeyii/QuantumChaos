@@ -1,10 +1,9 @@
 package com.theboxbrigade.quantumchaos;
 
-import javax.swing.Timer;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,46 +12,45 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.theboxbrigade.quantumchaos.controllers.BoxController;
+import com.theboxbrigade.quantumchaos.controllers.Interactable;
 import com.theboxbrigade.quantumchaos.controllers.ObjectController;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
 import com.theboxbrigade.quantumchaos.controllers.SchrodingerController;
-import com.theboxbrigade.quantumchaos.general.AnimationTimerListener;
 import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.DialogManager;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
+import com.theboxbrigade.quantumchaos.views.BoxView;
 
 public class TheHub extends World {
 	private static final float CAMERA_STEP_X = 2f;
 	private static final float CAMERA_STEP_Y = 1f;
-	private static final int TIMERMSECS = 60;
 	protected final String mapPath = "data/maps/";
 	protected final String mapName = "TheHub";
 	protected final String dialogPath = "data/dialog/";
 	protected final String dialogName = "TheHub.txt";
+	
 	protected TileManager tileManager;
 	protected DialogManager dialogManager;
-
-	protected Timer timer;
-	protected AnimationTimerListener timerListener;
 	
 	protected Array<ObjectController> objects;
-	protected PlayerController player;
+	protected PlayerController robert;
 	protected SchrodingerController schrodinger;
 	protected BoxController redBox, greenBox, blueBox;
 	
-	// TEST
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
+	protected int dialogBoxType = -1;
+	protected static final int BOX_DIALOG = 0;
+	protected static final int SCHRODINGER_DIALOG = 1;
+
+	protected Music bgMusic;
 	
 	@Override
 	public void create() {
 		System.out.println("I AM HERE - THE HUB!");
-		float w = Globals.GAME_WIDTH;
-		float h = Globals.GAME_HEIGHT;
-		
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, (w / h) * 10, 10);
+		camera.setToOrtho(false, ((Globals.GAME_WIDTH * 1.0f) / (Globals.GAME_HEIGHT * 1.0f)) * 10, 10);
 		camera.zoom = 2;
 		camera.translate(24.5f,-17.5f);
 		camera.update();
@@ -66,49 +64,20 @@ public class TheHub extends World {
 		tileMap = assetManager.get(mapPath + mapName + ".tmx");
 		tileMapRenderer = new IsometricTiledMapRenderer(tileMap, 1f / 32f);
 		
-		// Read the tileMap
 		tileManager = new TileManager(tileMap);
-		System.out.println(tileManager.getNumberOfLayers());
-		
-		// Timer
-		timerListener = new AnimationTimerListener(camera);
-		timer = new Timer(TIMERMSECS, timerListener);
-		timer.start();
-		
-		objects = new Array<ObjectController>();
-		
-		// Create the Player object;
-		player = new PlayerController(tileManager);
-		
-		// Create the Schrodinger object;
-		schrodinger = new SchrodingerController(tileManager);
-		objects.add(schrodinger);
-		timerListener.addObject(schrodinger);
-		
-		// Create boxes
-		redBox = new BoxController(tileManager,0);
-		greenBox = new BoxController(tileManager,1);
-		blueBox = new BoxController(tileManager,2);
-		objects.add(redBox);
-		objects.add(greenBox);
-		objects.add(blueBox);
-		timerListener.addObject(redBox);
-		timerListener.addObject(greenBox);
-		timerListener.addObject(blueBox);
-		redBox.setPosition(tileManager.getTile(10, 14));
-		redBox.setScreenPosition(Globals.TILE_WIDTH*1.5f, Globals.TILE_HEIGHT*8.5f);
-		greenBox.setPosition(tileManager.getTile(10, 5));
-		greenBox.setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
-		blueBox.setPosition(tileManager.getTile(14, 10));
-		blueBox.setScreenPosition(Globals.TILE_WIDTH*6.25f, Globals.TILE_HEIGHT*8.5f);
-		
-		// Dialog Manager
 		dialogManager = new DialogManager();
 		dialogManager.loadFile(dialogPath + dialogName);
+		
+		objects = new Array<ObjectController>();
+		populateWorld();
+		
+		bgMusic = Assets.theHubMusic;
+		bgMusic.setLooping(true);
+		bgMusic.play();
 	}
 
 	@Override
-	public void render() {
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		camera.update();
@@ -121,18 +90,20 @@ public class TheHub extends World {
 		for (int i = 0; i < objects.size; i++) {
 			spriteBatch = objects.get(i).getViewSpriteBatch();
 			spriteBatch.begin();
-				objects.get(i).update();
+				objects.get(i).update(delta);
 			spriteBatch.end();
 		}
 		
 		// Draw the player
-		spriteBatch = player.getViewSpriteBatch();
+		spriteBatch = robert.getViewSpriteBatch();
 		spriteBatch.begin();
-			player.update();
+			if (robert.update(delta) && robert.state == PlayerController.WALKING) {
+				moveCamera();
+			}
 		spriteBatch.end();
 		
-		// TEST - DIALOG BOX
-		if (showDialog) {
+		// Dialog Box
+		if (showDialog && dialogBox != null) {
 			spriteBatch = dialogBox.getSpriteBatch();
 			spriteBatch.begin();
 				dialogBox.update();
@@ -142,75 +113,172 @@ public class TheHub extends World {
 	
 	@Override
 	public void parseInput(Input input) {
-		if (!timerListener.blockInput) {
-			if (!player.getTileInFrontOfPlayer().equals(schrodinger.getPosition().getTile()))
-				schrodinger.setTalking(false);
-			if (input.buttons[Input.WALK_NORTH] && !input.oldButtons[Input.WALK_NORTH]) {
-				player.processInput(Input.WALK_NORTH);
-				if (player.isMoving()) {
-					timerListener.setMoving(true, Globals.NORTH);
-				}
-				input.releaseAllKeys();
-			} else if (input.buttons[Input.WALK_EAST] && !input.oldButtons[Input.WALK_EAST]) {
-				player.processInput(Input.WALK_EAST);
-				if (player.isMoving()) {
-					timerListener.setMoving(true, Globals.EAST);
-				}
-				input.releaseAllKeys();
-			} else if (input.buttons[Input.WALK_SOUTH] && !input.oldButtons[Input.WALK_SOUTH]) {
-				player.processInput(Input.WALK_SOUTH);
-				if (player.isMoving()) {
-					timerListener.setMoving(true, Globals.SOUTH);
-				}
-				input.releaseAllKeys();
-			} else if (input.buttons[Input.WALK_WEST] && !input.oldButtons[Input.WALK_WEST]) {
-				player.processInput(Input.WALK_WEST);
-				if (player.isMoving()) {
-					timerListener.setMoving(true, Globals.WEST);
-				}
-				input.releaseAllKeys();
-			} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
-				player.processInput(Input.INTERACT);
-				Tile tmpTile = player.getTileInFrontOfPlayer();
-				for (int i = 0; i < objects.size; i++) {
-					if (objects.get(i).getPosition().getTile().equals(tmpTile)) {
-						objects.get(i).processInput(Globals.INTERACT);
-						break;
-					}
-				}
-				input.releaseAllKeys();
+		if (input.buttons[Input.WALK_NORTH]) {
+			robert.processInput(Input.WALK_NORTH);
+		} else if (input.buttons[Input.WALK_EAST]) {
+			robert.processInput(Input.WALK_EAST);
+		} else if (input.buttons[Input.WALK_SOUTH]) {
+			robert.processInput(Input.WALK_SOUTH);
+		} else if (input.buttons[Input.WALK_WEST]) {
+			robert.processInput(Input.WALK_WEST);
+		} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
+			Interactable tmp = (Interactable)robert.getTileInFrontOfPlayer().getObstructing();
+			if (tmp != null) {
+				robert.setInteractable(tmp);
+				robert.processInput(Input.INTERACT);
+				tmp = null; 
 			}
-			if (schrodinger.isTalking()) {
-				dialogBox = schrodinger.getDialogBox();
-				dialogBox.setText(dialogManager.getString());
-				dialogBox.setVisible(true);
-				showDialog = true;
-			} else {
-				if (dialogBox != null) {
-					dialogBox.setVisible(false);
-					showDialog = false;
-				}
+			input.releaseAllKeys();
+		} else if ((input.buttons[Input.DPAD_DOWN] && !input.oldButtons[Input.DPAD_DOWN])
+				|| (input.buttons[Input.DPAD_UP] && !input.oldButtons[Input.DPAD_UP])) {
+			if (showDialog) {
+				((YesNoDialogBox)dialogBox).processInput(Input.DPAD_DOWN);
 			}
-			if (redBox.isOpen() || greenBox.isOpen() || blueBox.isOpen()) {
-				player.processGameState(GameStates.BOX_OPEN);
+			input.releaseAllKeys();
+		} else if (input.buttons[Input.AFFIRM] && !input.oldButtons[Input.AFFIRM]) {
+			if (showDialog) {
+				int choice = ((YesNoDialogBox)dialogBox).processInput(Input.AFFIRM);
+				if (choice == YesNoDialogBox.YES_SELECTED) {
+					readyToLeave = true;
+					if (redBox.isOpen()) nextWorld = redBox.getWorldToTravelTo();
+					else if (greenBox.isOpen()) nextWorld = greenBox.getWorldToTravelTo();
+					else if (blueBox.isOpen()) nextWorld = blueBox.getWorldToTravelTo();
+				}
 			}
 		}
+		
+		checkSchrodingerTalking();
+		checkOpenBox();
+		closeInactiveDialog();
+	}
+	
+	/**
+	 * If Robert is interacting with Dr. Schrodinger, create a dialog box for it
+	 */
+	protected void checkSchrodingerTalking() {
+		if (schrodinger.state == SchrodingerController.INIT_TALKING) {
+			dialogBoxType = SCHRODINGER_DIALOG;
+			schrodinger.setState(SchrodingerController.TALKING);
+			String text = dialogManager.getString();
+			dialogBox = new DialogBox(Assets.schrodingerE, text);
+			dialogBox.setVisible(true);
+			showDialog = true;
+		} else if (robert.state != PlayerController.INTERACTING && 
+				schrodinger.state != SchrodingerController.TALKING && 
+				dialogBoxType == SCHRODINGER_DIALOG) {
+			dialogBoxType = -1;
+			dialogBox = null;
+			showDialog = false;
+		}
+	}
+	
+	/**
+	 * If Robert is interacting with a box, create a dialog box for it
+	 */
+	protected void checkOpenBox() {
+		if (redBox.isOpen()) {
+			dialogBoxType = BOX_DIALOG;
+			if (dialogBox == null) {
+				dialogBox = redBox.getDialogBox();
+				showDialog = true;
+			}
+		} else if (greenBox.isOpen()) {
+			dialogBoxType = BOX_DIALOG;
+			if (dialogBox == null) {
+				dialogBox = greenBox.getDialogBox();
+				showDialog = true;
+			}
+		} else if (blueBox.isOpen()) {
+			dialogBoxType = BOX_DIALOG;
+			if (dialogBox == null) {
+				dialogBox = blueBox.getDialogBox();
+				showDialog = true;
+			}
+		}  else if (dialogBoxType == BOX_DIALOG) {
+			dialogBox = null;
+			showDialog = false;
+			dialogBoxType = -1;
+		}
+	}
+	
+	/**
+	 * If Robert is no longer interacting with an object, close any dialog boxes
+	 */
+	protected void closeInactiveDialog() {
+		if (robert.state != PlayerController.INTERACTING) {
+			if (showDialog && dialogBox != null) {
+				dialogBoxType = -1;
+				dialogBox = null;
+				showDialog = false;
+			}
+		}
+	}
+	
+	/**
+	 * If Robert is walking, follow him with the camera
+	 */
+	protected void moveCamera() {
+		float camScale = 4.0f;
+		float scale = 4.0f;
+		float tX = 0, tY = 0;
+		float oX = 0, oY = 0;
+		switch (robert.getFacing()) {
+			case Globals.NORTH:	tX = CAMERA_STEP_X / camScale;
+								tY = CAMERA_STEP_Y / camScale;
+								oX = -Globals.OBJ_TRANSLATION_X / scale;
+								oY = -Globals.OBJ_TRANSLATION_Y / scale;
+								break;
+			case Globals.EAST:	tX = CAMERA_STEP_X / camScale;
+								tY = -CAMERA_STEP_Y / camScale;
+								oX = -Globals.OBJ_TRANSLATION_X / scale;
+								oY = Globals.OBJ_TRANSLATION_Y / scale;
+								break;
+			case Globals.SOUTH:	tX = -CAMERA_STEP_X / camScale;
+								tY = -CAMERA_STEP_Y / camScale;
+								oX = Globals.OBJ_TRANSLATION_X / scale;
+								oY = Globals.OBJ_TRANSLATION_Y / scale;
+								break;
+			case Globals.WEST:	tX = -CAMERA_STEP_X / camScale;
+								tY = CAMERA_STEP_Y / camScale;
+								oX = Globals.OBJ_TRANSLATION_X / scale;
+								oY = -Globals.OBJ_TRANSLATION_Y / scale;
+		}
+		camera.translate(tX, tY);
+		for (ObjectController object : objects)
+			object.translate(oX, oY);
+		camera.update();
+	}
+	
+	protected void populateWorld() {
+		// Create the Player object
+		robert = new PlayerController(tileManager);
+		
+		// Create the Schrodinger object
+		schrodinger = new SchrodingerController(tileManager);
+		schrodinger.setPosition(tileManager.getTile(9, 8));
+		schrodinger.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH / 2.0f, Globals.TILE_HEIGHT * 12.5f);
+		objects.add(schrodinger);
+		
+		// Create boxes
+		redBox = new BoxController(tileManager, BoxView.RED);
+		greenBox = new BoxController(tileManager, BoxView.GREEN);
+		blueBox = new BoxController(tileManager, BoxView.BLUE);
+		greenBox.setWorldToTravelTo(Globals.GALILEO1);
+		blueBox.setWorldToTravelTo(Globals.NEWTON1);
+		objects.add(redBox);
+		objects.add(greenBox);
+		objects.add(blueBox);
+		redBox.setPosition(tileManager.getTile(10, 14));
+		redBox.setScreenPosition(Globals.TILE_WIDTH*1.5f, Globals.TILE_HEIGHT*8.5f);
+		greenBox.setPosition(tileManager.getTile(10, 5));
+		greenBox.setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
+		blueBox.setPosition(tileManager.getTile(14, 10));
+		blueBox.setScreenPosition(Globals.TILE_WIDTH*6.25f, Globals.TILE_HEIGHT*8.5f);
 	}
 
-	protected void updateObjects(int state) {
-		for (int i = 0; i < objects.size; i++) {
-			objects.get(i).processInput(state);
-		}
-	}
-	
-	protected ObjectController getObject(ObjectController object) {
-		for (int i = 0; i < objects.size; i++) {
-			if (objects.get(i) == object) return objects.get(i);
-		}
-		return null;
-	}
-	
-	public class GameStates {
-		public static final int BOX_OPEN = 0;
+	@Override
+	public void dispose() {
+		assetManager.clear();
+		bgMusic.stop();
 	}
 }
