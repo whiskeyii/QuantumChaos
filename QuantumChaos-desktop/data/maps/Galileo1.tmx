@@ -35,7 +35,7 @@
  </tileset>
  <layer name="Tile Layer 1" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYBwhmJkINax4MCcan1T96Hiw62cfQPsJ2Y1LPz596HLEuh+XmbRwP7pefOZQI08AADJzAvs=
+   eJxjZGBgYBwhmJVINcTi4a6ffQDtJ2Q3Lv349KHLEet+XGbSwv3oevGZQ408AQAtSwL5
   </data>
  </layer>
  <layer name="Planet Slots" width="16" height="16">

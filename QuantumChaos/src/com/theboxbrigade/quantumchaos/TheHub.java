@@ -36,7 +36,7 @@ public class TheHub extends World {
 	protected Array<ObjectController> objects;
 	protected PlayerController robert;
 	protected SchrodingerController schrodinger;
-	protected BoxController redBox, greenBox, blueBox;
+	protected BoxController redBox, greenBox;
 	
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
@@ -156,7 +156,6 @@ public class TheHub extends World {
 					readyToLeave = true;
 					if (redBox.isOpen()) nextWorld = redBox.getWorldToTravelTo();
 					else if (greenBox.isOpen()) nextWorld = greenBox.getWorldToTravelTo();
-					else if (blueBox.isOpen()) nextWorld = blueBox.getWorldToTravelTo();
 				}
 			}
 		}
@@ -200,12 +199,6 @@ public class TheHub extends World {
 			dialogBoxType = BOX_DIALOG;
 			if (dialogBox == null) {
 				dialogBox = greenBox.getDialogBox();
-				showDialog = true;
-			}
-		} else if (blueBox.isOpen()) {
-			dialogBoxType = BOX_DIALOG;
-			if (dialogBox == null) {
-				dialogBox = blueBox.getDialogBox();
 				showDialog = true;
 			}
 		}  else if (dialogBoxType == BOX_DIALOG) {
@@ -276,18 +269,13 @@ public class TheHub extends World {
 		// Create boxes
 		redBox = new BoxController(tileManager, BoxView.RED);
 		greenBox = new BoxController(tileManager, BoxView.GREEN);
-		blueBox = new BoxController(tileManager, BoxView.BLUE);
 		greenBox.setWorldToTravelTo(Globals.GALILEO1);
-		blueBox.setWorldToTravelTo(Globals.NEWTON1);
 		objects.add(redBox);
 		objects.add(greenBox);
-		objects.add(blueBox);
 		redBox.setPosition(tileManager.getTile(10, 14));
 		redBox.setScreenPosition(Globals.TILE_WIDTH*1.5f, Globals.TILE_HEIGHT*8.5f);
 		greenBox.setPosition(tileManager.getTile(10, 5));
 		greenBox.setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
-		blueBox.setPosition(tileManager.getTile(14, 10));
-		blueBox.setScreenPosition(Globals.TILE_WIDTH*6.25f, Globals.TILE_HEIGHT*8.5f);
 	}
 
 	@Override

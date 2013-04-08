@@ -23,6 +23,7 @@ public class Assets {
 	public static Sprite blueBoxClosed, blueBoxOpen;
 	public static Sprite redBoxClosed, redBoxOpen;
 	public static Sprite redKey, greenKey, blueKey, silverKey;
+	public static Sprite doorW, doorN;
 	
 	public static Sprite dialogBoxBG;
 	
@@ -36,10 +37,12 @@ public class Assets {
 	public static Sound step;
 	public static Sound walkIntoWall;
 	public static Music theHubMusic;
+	public static Music galileoMusic;
 	public static Sound planetPickUp, planetDrop;
 	public static Sound correctPlanetPlacement;
 	public static Sound incorrectPlanetPlacement;
 	public static Sound planetPuzzleComplete;
+	public static Sound unlock;
 	
 	public static void load() {
 		// FONT(S)
@@ -66,10 +69,12 @@ public class Assets {
 		redBoxOpen = load("data/images/boxes_open.png", 256, 128, 128, 128, false);
 		blueBoxClosed = load("data/images/boxes2.png", 321, 288, 107, 96, false);
 		blueBoxOpen = load("data/images/boxes_open.png", 384, 0, 128, 128, false);
-		silverKey = load("data/images/keys.png", 0, 0, 51, 128, false);
-		redKey = load("data/images/keys.png", 51, 0, 51, 128, false);
-		greenKey = load("data/images/keys.png", 102, 0, 51, 128, false);
-		blueKey = load("data/images/keys.png", 153, 0, 51, 128, false);
+		silverKey = load("data/images/keys.png", 0, 0, 26, 57, false);
+		redKey = load("data/images/keys.png", 26, 0, 26, 57, false);
+		greenKey = load("data/images/keys.png", 52, 0, 26, 57, false);
+		blueKey = load("data/images/keys.png", 78, 0, 26, 57, false);
+		doorW = load("data/images/doors.png", 0, 0, 70, 128, false);
+		doorN = load("data/images/doors.png", 70, 0, 70, 128, false);
 		
 		
 		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
@@ -78,10 +83,11 @@ public class Assets {
 		chestOpen = loadSound("data/sounds/chest open.mp3");
 		walkIntoWall = loadSound("data/sounds/robert run into.mp3");
 		step = loadSound("data/sounds/robert step.mp3");
-		
+		unlock = loadSound("data/sounds/DOOR-CHEST UNLOCK.mp3");
 		
 		// MUSIC
 		theHubMusic = loadMusic("data/sounds/hub world theme.mp3");
+		galileoMusic = loadMusic("data/sounds/Galileo World Theme.mp3");
 	}
 	
 	public static void load(int world) {

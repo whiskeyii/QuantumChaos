@@ -3,7 +3,6 @@ package com.theboxbrigade.quantumchaos;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,7 +11,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.theboxbrigade.quantumchaos.controllers.BoxController;
+import com.theboxbrigade.quantumchaos.controllers.DoorController;
 import com.theboxbrigade.quantumchaos.controllers.Interactable;
+import com.theboxbrigade.quantumchaos.controllers.KeyController;
 import com.theboxbrigade.quantumchaos.controllers.ObjectController;
 import com.theboxbrigade.quantumchaos.controllers.PlanetController;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
@@ -39,6 +40,8 @@ public class Galileo1 extends World {
 	protected PlanetController[] planets;
 	protected PlanetSlot[] slots;
 	protected boolean puzzleComplete = false;
+	protected KeyController key;
+	protected DoorController door;
 	
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
@@ -70,6 +73,8 @@ public class Galileo1 extends World {
 		
 		objects = new Array<ObjectController>();
 		populateWorld();
+		
+		nextWorld = Globals.GALILEO2;
 	}
 
 	@Override
@@ -88,7 +93,7 @@ public class Galileo1 extends World {
 			spriteBatch.begin();
 				object.update(delta);
 			spriteBatch.end();
-		}
+		}				
 		
 		// Draw the player
 		spriteBatch = robert.getViewSpriteBatch();
@@ -108,7 +113,7 @@ public class Galileo1 extends World {
 				spriteBatch.end();
 			}
 		}
-		
+	
 		// Dialog Box
 		if (showDialog && dialogBox != null) {
 			dialogBox.setVisible(true);
@@ -148,6 +153,7 @@ public class Galileo1 extends World {
 		checkCarryingPlanet();
 		drawPlanetOverPlayer();
 		if (!puzzleComplete) checkPuzzleComplete();
+		checkDoorUnlockable();
 	}
 	
 	protected int getWorldToTravelTo(BoxController box) {
@@ -266,6 +272,18 @@ public class Galileo1 extends World {
 		// SUN slot is initially satisfied because it's already in the proper place
 		slots[0].makeSatisfied();
 		planets[0].setInteractable(false);
+		
+		// KEY and DOOR
+		door = new DoorController(tileManager, Globals.NORTH);
+		door.setPosition(tileManager.getTile(11,3));
+		door.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.5f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 8.0f);
+		objects.add(door);
+		
+		key = new KeyController(tileManager, -1);
+		key.setPosition(tileManager.getTile(13,6));
+		key.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.0f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 4.0f);
+		key.setObstructing(false);
+		objects.add(key);
 	}
 	
 	/**
@@ -280,7 +298,12 @@ public class Galileo1 extends World {
 				break;
 			}
 		}
-		if (puzzleComplete) Assets.planetPuzzleComplete.play();
+		if (puzzleComplete) {
+			key.setObstructing(true);
+			key.setVisible(true);
+			key.setInteractable(true);
+			Assets.planetPuzzleComplete.play();
+		}
 	}
 	
 	/**
@@ -360,6 +383,9 @@ public class Galileo1 extends World {
 				break;
 			}
 		}
+		if (key.state == KeyController.PICKED_UP) {
+			key.setScreenPosition(Globals.GAME_WIDTH / 2.0f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 1.75f);
+		}
 	}
 	
 	protected boolean isPlanetSlotInFrontOfPlayer() {
@@ -379,6 +405,15 @@ public class Galileo1 extends World {
 		return null;
 	}
 
+	protected void checkDoorUnlockable() {
+		if (key.state == KeyController.PICKED_UP) {
+			if (!door.isUnlockable()) {
+				System.out.println("Make door unlockable");
+				door.setUnlockable(true);
+			}
+		}
+	}
+	
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub

@@ -1,6 +1,5 @@
 package com.theboxbrigade.quantumchaos.controllers;
 
-import com.theboxbrigade.quantumchaos.Door;
 import com.theboxbrigade.quantumchaos.Obstructing;
 import com.theboxbrigade.quantumchaos.Position;
 import com.theboxbrigade.quantumchaos.Tile;
@@ -12,7 +11,6 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	public static final int DROPPED = 0;
 	public static final int PICKED_UP = 1;
 	protected Position position;
-	protected Door door;
 	protected float x;
 	protected float y;
 	public int state = DROPPED;
@@ -20,11 +18,10 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	protected boolean interactable = false;
 	private TileManager tileManager;
 	
-	public KeyController(TileManager tileManager, Door door, int keyColor) {
+	public KeyController(TileManager tileManager, int keyColor) {
 		this.tileManager = tileManager;
 		position = new Position(this.tileManager);
 		
-		this.door = door;
 		model = new KeyModel(this);
 		view = new KeyView(keyColor);
 	}
@@ -57,7 +54,6 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	@Override
 	public void processInput(int input) {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	@Override
@@ -69,14 +65,15 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 
 	@Override
 	protected void updateView() {
-		// TODO Auto-generated method stub
-		
+		if (visible) ((KeyView)view).update(x, y, state);
 	}
 
 	@Override
 	public void whenInteractedWith() {
-		// TODO Auto-generated method stub
-		
+		if (interactable) {
+			if (state == DROPPED) ((KeyModel)model).pickUp();
+			else if (state == PICKED_UP) ((KeyModel)model).drop();
+		}
 	}
 
 	public void setInteractable(boolean interactable) {
@@ -91,10 +88,17 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	
+	public void setObstructing(boolean obstructing) {
+		tileManager.getTile(position.getX(), position.getY()).setObstructed(obstructing);
+		if (obstructing)
+			tileManager.getTile(position.getX(), position.getY()).setObstructing(this);
+		else
+			tileManager.getTile(position.getX(), position.getY()).setObstructing(null);
+	}
 
 	@Override
 	public boolean equals(ObjectController other) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

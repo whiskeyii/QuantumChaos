@@ -9,7 +9,7 @@ public class PlayingScreen extends Screen {
 	World world;
 	
 	public PlayingScreen() {
-		world = new Galileo1();
+		world = new TheHub();
 		spriteBatch = world.getSpriteBatch();
 	}
 	
