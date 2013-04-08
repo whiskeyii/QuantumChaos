@@ -16,12 +16,10 @@ import com.theboxbrigade.quantumchaos.controllers.Interactable;
 import com.theboxbrigade.quantumchaos.controllers.ObjectController;
 import com.theboxbrigade.quantumchaos.controllers.PlanetController;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
-import com.theboxbrigade.quantumchaos.controllers.SchrodingerController;
 import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.DialogManager;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
-import com.theboxbrigade.quantumchaos.views.BoxView;
 import com.theboxbrigade.quantumchaos.views.PlanetView;
 
 public class Galileo1 extends World {
@@ -39,6 +37,8 @@ public class Galileo1 extends World {
 	protected Array<ObjectController> objects;
 	protected PlayerController robert;
 	protected PlanetController[] planets;
+	protected PlanetSlot[] slots;
+	protected boolean puzzleComplete = false;
 	
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
@@ -98,6 +98,17 @@ public class Galileo1 extends World {
 			}
 		spriteBatch.end();
 		
+		// Draw objects over Robert
+		for (ObjectController object : objects) {
+			if (object.getPosition().getX() > robert.getPosition().getX() ||
+					object.getPosition().getY() > robert.getPosition().getY()) {
+				spriteBatch = object.getViewSpriteBatch();
+				spriteBatch.begin();
+					object.update(delta);
+				spriteBatch.end();
+			}
+		}
+		
 		// Dialog Box
 		if (showDialog && dialogBox != null) {
 			dialogBox.setVisible(true);
@@ -112,16 +123,12 @@ public class Galileo1 extends World {
 	public void parseInput(Input input) {
 		if (input.buttons[Input.WALK_NORTH]) {
 			robert.processInput(Input.WALK_NORTH);
-			//input.releaseAllKeys();
 		} else if (input.buttons[Input.WALK_EAST]) {
 			robert.processInput(Input.WALK_EAST);
-			//input.releaseAllKeys();
 		} else if (input.buttons[Input.WALK_SOUTH]) {
 			robert.processInput(Input.WALK_SOUTH);
-			//input.releaseAllKeys();
 		} else if (input.buttons[Input.WALK_WEST]) {
 			robert.processInput(Input.WALK_WEST);
-			//input.releaseAllKeys();
 		} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
 			Interactable tmp = (Interactable)robert.getTileInFrontOfPlayer().getObstructing();
 			if (tmp != null) {
@@ -129,6 +136,7 @@ public class Galileo1 extends World {
 				robert.processInput(Input.INTERACT);
 				tmp = null; 
 			}
+			handleDropPlanet();
 			input.releaseAllKeys();
 		} else if (input.buttons[Input.AFFIRM] && !input.oldButtons[Input.AFFIRM]) {
 			if (showDialog) {
@@ -136,12 +144,20 @@ public class Galileo1 extends World {
 				if (choice == YesNoDialogBox.YES_SELECTED) readyToLeave = true;
 			}
 		}
+		
+		checkCarryingPlanet();
+		drawPlanetOverPlayer();
+		if (!puzzleComplete) checkPuzzleComplete();
 	}
 	
 	protected int getWorldToTravelTo(BoxController box) {
 		return box.getWorldToTravelTo();
 	}
 	
+	/**
+	 * Move the camera to the proper position<br/>
+	 * Also, translate the scene objects to their proper positions
+	 */
 	protected void moveCamera() {
 		float scale = 4.0f;
 		float tX = 0, tY = 0;
@@ -187,6 +203,15 @@ public class Galileo1 extends World {
 		planets[6] = new PlanetController(tileManager, PlanetView.SATURN);
 		planets[7] = new PlanetController(tileManager, PlanetView.URANUS);
 		planets[8] = new PlanetController(tileManager, PlanetView.NEPTUNE);
+		planets[0].setCorrectSlotPosition(tileManager.getTile(4, 14));
+		planets[1].setCorrectSlotPosition(tileManager.getTile(5, 14));
+		planets[2].setCorrectSlotPosition(tileManager.getTile(6, 13));
+		planets[3].setCorrectSlotPosition(tileManager.getTile(4, 11));
+		planets[4].setCorrectSlotPosition(tileManager.getTile(8, 14));
+		planets[5].setCorrectSlotPosition(tileManager.getTile(6, 10));
+		planets[6].setCorrectSlotPosition(tileManager.getTile(9, 12));
+		planets[7].setCorrectSlotPosition(tileManager.getTile(7, 8));
+		planets[8].setCorrectSlotPosition(tileManager.getTile(11, 11));
 		objects.add(planets[0]);
 		objects.add(planets[1]);
 		objects.add(planets[2]);
@@ -196,13 +221,162 @@ public class Galileo1 extends World {
 		objects.add(planets[6]);
 		objects.add(planets[7]);
 		objects.add(planets[8]);
+		planets[0].setPosition(tileManager.getTile(4,14));
+		planets[0].setScreenPosition(Globals.TILE_WIDTH * -2.125f, Globals.GAME_HEIGHT);
+		planets[1].setPosition(tileManager.getTile(9,7));
+		planets[1].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 7.0f);
+		planets[2].setPosition(tileManager.getTile(7,4));
+		planets[2].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 1.625f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 10.0f);
+		planets[3].setPosition(tileManager.getTile(9,4));
+		planets[3].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 2.875f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 8.75f);
+		planets[4].setPosition(tileManager.getTile(12,9));
+		planets[4].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 1.625f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 4.125f);
+		planets[5].setPosition(tileManager.getTile(10,6));
+		planets[5].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 2.25f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 7.25f);
+		planets[6].setPosition(tileManager.getTile(8,5));
+		planets[6].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 1.625f - 18, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 9.0f);
+		planets[7].setPosition(tileManager.getTile(13,11));
+		planets[7].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH - 22, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 2.5f);
+		planets[8].setPosition(tileManager.getTile(11,7));
+		planets[8].setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 2.25f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 6.0f);
+		planets[6].offsetX = -18;
+		planets[7].offsetX = -22;
 		
-		planets[0].setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
 		
+		slots = new PlanetSlot[9];
+		slots[0] = new PlanetSlot(tileManager, PlanetView.SUN);
+		slots[0].setPosition(tileManager.getTile(4,14));
+		slots[1] = new PlanetSlot(tileManager, PlanetView.MERCURY);
+		slots[1].setPosition(tileManager.getTile(5,14));
+		slots[2] = new PlanetSlot(tileManager, PlanetView.VENUS);
+		slots[2].setPosition(tileManager.getTile(6,13));
+		slots[3] = new PlanetSlot(tileManager, PlanetView.EARTH);
+		slots[3].setPosition(tileManager.getTile(4,11));
+		slots[4] = new PlanetSlot(tileManager, PlanetView.MARS);
+		slots[4].setPosition(tileManager.getTile(8,14));
+		slots[5] = new PlanetSlot(tileManager, PlanetView.JUPITER);
+		slots[5].setPosition(tileManager.getTile(6,10));
+		slots[6] = new PlanetSlot(tileManager, PlanetView.SATURN);
+		slots[6].setPosition(tileManager.getTile(9,12));
+		slots[7] = new PlanetSlot(tileManager, PlanetView.URANUS);
+		slots[7].setPosition(tileManager.getTile(7,8));
+		slots[8] = new PlanetSlot(tileManager, PlanetView.NEPTUNE);
+		slots[8].setPosition(tileManager.getTile(11,11));
+		
+		// SUN slot is initially satisfied because it's already in the proper place
+		slots[0].makeSatisfied();
+		planets[0].setInteractable(false);
 	}
 	
-	protected void addWorldListener(WorldListener listener) {
-		notifier.addListener(listener);
+	/**
+	 *  Check if all planets have been placed in their proper positions.<br/>
+	 *  If so, reveal the key and Galileo's notebook page
+	 */
+	protected void checkPuzzleComplete() {
+		puzzleComplete = true;
+		for (PlanetSlot slot : slots) {
+			if (!slot.isSatisfied()) {
+				puzzleComplete = false;
+				break;
+			}
+		}
+		if (puzzleComplete) Assets.planetPuzzleComplete.play();
+	}
+	
+	/**
+	 * Check if Robert has just picked up a planet
+	 */
+	protected void checkCarryingPlanet() {
+		for (PlanetController planet : planets) {
+			if (planet.state == PlanetController.IN_HANDS) {
+				if (!robert.isCarrying()) {
+					Assets.planetPickUp.play();
+					robert.setCarrying(true);
+					robert.setCarryable(planet);
+					break;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 1. Determine the planet that Robert is holding.<br/>
+	 * 2. Set its position to the tile in front of Robert.<br/>
+	 * 3. Do logic to drop the planet (planet-side; player-side; world-side).
+	 */
+	protected void handleDropPlanet() {
+		Tile tmpTile = robert.getTileInFrontOfPlayer();
+		if (!tmpTile.isObstructed()) {
+			if (robert.isCarrying()) {
+				int planetType = -1;
+				PlanetController tmpPlanet = null;
+				for (PlanetController planet : planets) {
+					if (planet.state == PlanetController.IN_HANDS) {
+						tmpPlanet = planet;
+						planet.setPosition(tileManager.getTile(tmpTile.getX(), tmpTile.getY()));
+						switch (robert.getFacing()) {
+							case Globals.NORTH:	planet.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH / 2.0f + tmpPlanet.offsetX, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT / 2.0f);
+												break;
+							case Globals.EAST:	planet.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH / 2.0f + tmpPlanet.offsetX, Globals.GAME_HEIGHT / 2.0f - Globals.TILE_HEIGHT / 2.0f);
+												break;
+							case Globals.SOUTH:	planet.setScreenPosition(Globals.GAME_WIDTH / 2.0f - Globals.TILE_WIDTH / 1.5f + tmpPlanet.offsetX, Globals.GAME_HEIGHT / 2.0f - Globals.TILE_HEIGHT / 2.0f);
+												break;
+							case Globals.WEST:	planet.setScreenPosition(Globals.GAME_WIDTH / 2.0f - Globals.TILE_WIDTH / 1.5f + tmpPlanet.offsetX, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT / 2.0f);
+												break;
+						}
+						planetType = planet.planet;
+						break;
+					}
+				}
+				// Dropped planet - on a slot
+				if (isPlanetSlotInFrontOfPlayer()) {
+					PlanetSlot tmpSlot = getPlanetSlotInFrontOfPlayer();
+					if (tmpSlot.isCorrectPlanet(planetType)) {
+						tmpSlot.makeSatisfied();
+						if (tmpPlanet != null) tmpPlanet.setInteractable(false);
+						Assets.correctPlanetPlacement.play();
+					} else {
+						Assets.incorrectPlanetPlacement.play();
+					}
+				// Dropped planet - NOT on a slot
+				} else {
+					Assets.planetDrop.play();
+				}
+				robert.getCarryable().dropAction();
+				robert.setCarrying(false);
+				robert.setCarryable(null);
+			}
+		}
+	}
+	
+	/**
+	 * If a planet's state is PlanetController.IN_HANDS (Robert is carrying),
+	 * then draw it over Robert's head as if he's carrying it
+	 */
+	protected void drawPlanetOverPlayer() {
+		for (PlanetController planet : planets) {
+			if (planet.state == PlanetController.IN_HANDS) {
+				planet.setScreenPosition(Globals.GAME_WIDTH / 2.0f - 24 + planet.offsetX, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 1.5f);
+				break;
+			}
+		}
+	}
+	
+	protected boolean isPlanetSlotInFrontOfPlayer() {
+		Tile tmp = robert.getTileInFrontOfPlayer();
+		for (PlanetSlot slot : slots) {
+			if (slot.getPosition().getX() == tmp.getX() && slot.getPosition().getY() == tmp.getY())
+				return true;
+		}
+		return false;
+	}
+	
+	protected PlanetSlot getPlanetSlotInFrontOfPlayer() {
+		for (PlanetSlot slot : slots) {
+			if (slot.getPosition().getTile().equals(robert.getTileInFrontOfPlayer()))
+				return slot;
+		}
+		return null;
 	}
 
 	@Override

@@ -18,8 +18,9 @@ public class Globals {
 	
 	public static final float DELTA = 0.066f;
 	
-	public static float OBJ_TRANSLATION_X = Globals.TILE_WIDTH / 1.75f;
-	public static float OBJ_TRANSLATION_Y = Globals.TILE_HEIGHT / 1.75f;
+	// Do not change these values! They ensure objects translate with the camera properly
+	public static float OBJ_TRANSLATION_X = Globals.TILE_WIDTH / 1.67f;
+	public static float OBJ_TRANSLATION_Y = Globals.TILE_HEIGHT / 1.67f;
 	
 	public static final int THE_HUB = 100;
 	public static final int GALILEO1 = 101;

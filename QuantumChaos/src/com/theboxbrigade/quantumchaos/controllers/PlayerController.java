@@ -30,6 +30,7 @@ public class PlayerController extends ObjectController implements Obstructing {
 	public static final int HIT = 15;
 	public static final int DEAD = 16;
 	public static final int SLIDING = 17;
+	public static final int INIT_CARRYING = 18;
 	
 	protected int maxHP = 4;
 	protected int currentHP = 4;
@@ -83,6 +84,8 @@ public class PlayerController extends ObjectController implements Obstructing {
 	public Interactable getInteractable() { return interactingWith; }
 	public void setCarrying(boolean carrying) { this.carrying = carrying; }
 	public boolean isCarrying() { return carrying; }
+	public void setCarryable(Carryable itemCarried) { this.itemCarried = itemCarried; }
+	public Carryable getCarryable() { return itemCarried; }
 	
 	@Override
 	public void processInput(int keyPressed) {

@@ -22,6 +22,7 @@ public class Assets {
 	public static Sprite greenBoxClosed, greenBoxOpen;
 	public static Sprite blueBoxClosed, blueBoxOpen;
 	public static Sprite redBoxClosed, redBoxOpen;
+	public static Sprite redKey, greenKey, blueKey, silverKey;
 	
 	public static Sprite dialogBoxBG;
 	
@@ -35,6 +36,10 @@ public class Assets {
 	public static Sound step;
 	public static Sound walkIntoWall;
 	public static Music theHubMusic;
+	public static Sound planetPickUp, planetDrop;
+	public static Sound correctPlanetPlacement;
+	public static Sound incorrectPlanetPlacement;
+	public static Sound planetPuzzleComplete;
 	
 	public static void load() {
 		// FONT(S)
@@ -61,6 +66,11 @@ public class Assets {
 		redBoxOpen = load("data/images/boxes_open.png", 256, 128, 128, 128, false);
 		blueBoxClosed = load("data/images/boxes2.png", 321, 288, 107, 96, false);
 		blueBoxOpen = load("data/images/boxes_open.png", 384, 0, 128, 128, false);
+		silverKey = load("data/images/keys.png", 0, 0, 51, 128, false);
+		redKey = load("data/images/keys.png", 51, 0, 51, 128, false);
+		greenKey = load("data/images/keys.png", 102, 0, 51, 128, false);
+		blueKey = load("data/images/keys.png", 153, 0, 51, 128, false);
+		
 		
 		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
 		
@@ -76,15 +86,20 @@ public class Assets {
 	
 	public static void load(int world) {
 		switch (world) {
-			case Globals.GALILEO1: 	SUN = load("data/images/planets.png", 0, 0, 256, 256, false);
-									MERCURY = load("data/images/planets.png", 257, 0, 96, 96, false);
-									VENUS = load("data/images/planets.png", 257, 96, 96, 96, false);
-									EARTH = load("data/images/planets.png", 353, 0, 96, 96, false);
-									MARS = load("data/images/planets.png", 353, 96, 0, 0, false);
-									JUPITER = load("data/images/planets.png", 449, 0, 128, 128, false);
-									SATURN = load("data/images/planets.png", 449, 128, 128, 176, false);
-									URANUS = load("data/images/planets.png", 577, 0, 128, 215, false);
-									NEPTUNE = load("data/images/planets.png", 625, 128, 128, 128, false);
+			case Globals.GALILEO1: 	SUN = load("data/images/planets.png", 612, 0, 96, 96, false);
+									MERCURY = load("data/images/planets.png", 288, 0, 96, 96, false);
+									VENUS = load("data/images/planets.png", 869, 0, 96, 96, false);
+									EARTH = load("data/images/planets.png", 0, 0, 96, 96, false);
+									MARS = load("data/images/planets.png", 192, 0, 96, 96, false);
+									JUPITER = load("data/images/planets.png", 96, 0, 96, 96, false);
+									SATURN = load("data/images/planets.png", 480, 0, 132, 96, false);
+									URANUS = load("data/images/planets.png", 708, 0, 161, 96, false);
+									NEPTUNE = load("data/images/planets.png", 384, 0, 96, 96, false);
+									planetPickUp = loadSound("data/sounds/pick up.mp3");
+									planetDrop = loadSound("data/sounds/drop.mp3");
+									correctPlanetPlacement = loadSound("data/sounds/Correct placement.mp3");
+									incorrectPlanetPlacement = loadSound("data/sounds/Wrong placement sound.mp3");
+									planetPuzzleComplete = loadSound("data/sounds/Puzzle Complete.mp3");
 									break;
 		}
 	}

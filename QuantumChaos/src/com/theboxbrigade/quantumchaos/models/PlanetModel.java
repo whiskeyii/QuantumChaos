@@ -12,16 +12,19 @@ public class PlanetModel extends Model {
 	public void placeOnPedestal() {
 		state = PlanetController.ON_PEDESTAL;
 		// TODO
+		sync();
 	}
 	
 	public void pickUp() {
 		state = PlanetController.IN_HANDS;
 		// TODO
+		sync();
 	}
 	
 	public void drop() {
 		state = PlanetController.ON_FLOOR;
 		// TODO
+		sync();
 	}
 	
 	@Override

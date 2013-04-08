@@ -50,6 +50,9 @@ public class TheHub extends World {
 	public void create() {
 		System.out.println("I AM HERE - THE HUB!");
 		camera = new OrthographicCamera();
+		// Camera viewport:
+		// 13.3333 x 10.0000
+		// [-6.666 : 6.666] x [-5.000 : 5.000]
 		camera.setToOrtho(false, ((Globals.GAME_WIDTH * 1.0f) / (Globals.GAME_HEIGHT * 1.0f)) * 10, 10);
 		camera.zoom = 2;
 		camera.translate(24.5f,-17.5f);
@@ -102,6 +105,17 @@ public class TheHub extends World {
 			}
 		spriteBatch.end();
 		
+		// Draw objects over Robert
+		for (ObjectController object : objects) {
+			if (object.getPosition().getX() > robert.getPosition().getX() ||
+					object.getPosition().getY() > robert.getPosition().getY()) {
+				spriteBatch = object.getViewSpriteBatch();
+				spriteBatch.begin();
+					object.update(delta);
+				spriteBatch.end();
+			}
+		}
+				
 		// Dialog Box
 		if (showDialog && dialogBox != null) {
 			spriteBatch = dialogBox.getSpriteBatch();
