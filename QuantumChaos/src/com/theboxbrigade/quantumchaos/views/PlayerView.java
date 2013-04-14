@@ -35,7 +35,34 @@ public class PlayerView extends CharacterView {
 												break;
 			case PlayerController.INTERACTING:	player = AnimatedAssets.getFrame(facingDir, 0);
 												break;
-			case PlayerController.TELEPORTING:	player = AnimatedAssets.getFrame(state, stateFrame);
+			case PlayerController.SLIDING:		player = AnimatedAssets.getFrame(facingDir, 0);
+												break;
+			case PlayerController.INIT_CARRYING:player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
+												break;
+			default:							player = AnimatedAssets.getFrame(state, stateFrame);
+												break;
+		}
+		draw(player, Globals.GAME_WIDTH/2, Globals.GAME_HEIGHT/2);
+	}
+	
+	public void update(int state, int facingDir, int stateFrame, boolean carrying) {
+		this.state = state;
+		switch (state) {
+			case PlayerController.IDLE:			if (carrying)
+													player = AnimatedAssets.getFrame(PlayerController.CARRYING, facingDir, 0);
+												else
+													player = AnimatedAssets.getFrame(facingDir, 0);
+												break;
+			case PlayerController.WALKING:		if (carrying)
+													player = AnimatedAssets.getFrame(PlayerController.CARRYING, facingDir, stateFrame);
+												else
+													player = AnimatedAssets.getFrame(PlayerController.WALKING, facingDir, stateFrame);
+												break;
+			case PlayerController.INTERACTING:	player = AnimatedAssets.getFrame(facingDir, 0);
+												break;
+			case PlayerController.SLIDING:		player = AnimatedAssets.getFrame(facingDir, 0);
+												break;
+			case PlayerController.INIT_CARRYING:player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
 												break;
 			default:							player = AnimatedAssets.getFrame(state, stateFrame);
 												break;

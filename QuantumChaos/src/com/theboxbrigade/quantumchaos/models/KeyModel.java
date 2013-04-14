@@ -12,12 +12,16 @@ public class KeyModel extends Model {
 	public void pickUp() {
 		state = KeyController.PICKED_UP;
 		((KeyController)controller).setObstructing(false);
+		((KeyController)controller).setVisible(false);
+		((KeyController)controller).setInteractable(false);
 		sync();
 	}
 	
 	public void drop() {
 		state = KeyController.DROPPED;
 		((KeyController)controller).setObstructing(true);
+		((KeyController)controller).setVisible(true);
+		((KeyController)controller).setInteractable(true);
 		sync();
 	}
 	

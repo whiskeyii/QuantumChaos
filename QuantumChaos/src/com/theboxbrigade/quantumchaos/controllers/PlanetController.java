@@ -126,4 +126,9 @@ public class PlanetController extends ObjectController implements Interactable, 
 		((PlanetModel)model).drop();
 	}
 
+	@Override
+	public int interactableType() {
+		return Interactable.PLANET;
+	}
+
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="14" height="14" tilewidth="128" tileheight="64">
+ <tileset firstgid="1" name="Newton" tilewidth="128" tileheight="64">
+  <image source="TheHub2.png" trans="ffffff" width="128" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="color" value="grey"/>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="color" value="red"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="color" value="blue"/>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="color" value="yellow"/>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="5" name="TheHub2" tilewidth="128" tileheight="64">
+  <image source="TheHub2.png" trans="ffffff" width="128" height="512"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="14" height="14">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYBpBmBELZoFiZDFa6sOGseljhmJq6oO5mV76aBEutIw/ACq+AVk=
+  </data>
+ </layer>
+ <layer name="Midground 1" width="14" height="14">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFrBToZaOaK+gDuCnQy0M1VwxeAAAvPAAj
+  </data>
+ </layer>
+</map>

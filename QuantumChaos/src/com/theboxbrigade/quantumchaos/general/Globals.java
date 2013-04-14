@@ -14,7 +14,9 @@ public class Globals {
 	public static final int SOUTH = 2;
 	public static final int WEST = 3;
 	public static final int INTERACT = 4;
-	public static final int TELEPORT = 5;
+	
+	public static final int WALK = 0;
+	public static final int PICKUP = 1;
 	
 	public static final float DELTA = 0.066f;
 	
@@ -22,6 +24,7 @@ public class Globals {
 	public static float OBJ_TRANSLATION_X = Globals.TILE_WIDTH / 1.67f;
 	public static float OBJ_TRANSLATION_Y = Globals.TILE_HEIGHT / 1.67f;
 	
+	public static final int MAIN_MENU = 99;
 	public static final int THE_HUB = 100;
 	public static final int GALILEO1 = 101;
 	public static final int GALILEO2 = 102;
@@ -30,4 +33,9 @@ public class Globals {
 	public static final int NEWTON2 = 105;
 	public static final int NEWTON3 = 106;
 	public static final int NEWTON4 = 107;
+	
+	// Game states:
+	public static final int STATE_GALILEO_BEATEN = 10;
+	public static final int STATE_NEWTON_BEATEN = 11;
+	public static int GAME_STATE = -1;
 }

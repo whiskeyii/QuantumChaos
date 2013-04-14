@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
+ <tileset firstgid="1" name="Galileo" tilewidth="128" tileheight="64">
+  <image source="Galileo1.png" trans="ffffff" width="512" height="512"/>
+  <tile id="0">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBwhmJVINcTi4a6ffQDtJ2Q3Lv349KHLEet+XGbSwv3oevGZQ408AQAtSwL5
+  </data>
+ </layer>
+ <layer name="Planet Slots" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFowA7YBqCduPTRwszaWEXExqflgAAFKAAEw==
+  </data>
+ </layer>
+</map>

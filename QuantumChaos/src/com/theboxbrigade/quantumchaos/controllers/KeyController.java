@@ -71,6 +71,7 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	@Override
 	public void whenInteractedWith() {
 		if (interactable) {
+			System.out.println("Interacting with key");
 			if (state == DROPPED) ((KeyModel)model).pickUp();
 			else if (state == PICKED_UP) ((KeyModel)model).drop();
 		}
@@ -100,6 +101,11 @@ public class KeyController extends ObjectController implements Obstructing, Inte
 	@Override
 	public boolean equals(ObjectController other) {
 		return false;
+	}
+
+	@Override
+	public int interactableType() {
+		return Interactable.KEY;
 	}
 
 }

@@ -31,11 +31,13 @@ public class PlayerController extends ObjectController implements Obstructing {
 	public static final int DEAD = 16;
 	public static final int SLIDING = 17;
 	public static final int INIT_CARRYING = 18;
+	public static final int CARRYING = 19;
 	
 	protected int maxHP = 4;
 	protected int currentHP = 4;
 	protected Position position;
 	public int state = IDLE;
+	public boolean blockInput = false;
 	protected int deltaState = 0;
 	protected int stateFrame = 0;
 	protected Interactable interactingWith;
@@ -57,9 +59,14 @@ public class PlayerController extends ObjectController implements Obstructing {
 	public void setHP(int hp) { this.currentHP = hp; }
 	public int getHP() { return currentHP; }
 	
-	public void setPosition(Position p) {
-		position.setTile(p.getTile());
+	public void setPosition(Tile t) {
+		tileManager.getTile(position.getX(), position.getY()).setObstructed(false);
+		tileManager.getTile(position.getX(), position.getY()).setObstructing(null);
+		position.setTile(tileManager.getTile(t.getX(), t.getY()));
+		tileManager.getTile(position.getX(), position.getY()).setObstructed(true);
+		tileManager.getTile(position.getX(), position.getY()).setObstructing(this);
 	}
+	
 	public Position getPosition() { return position; }
 	
 	/** Looks forward one Tile in the direction Robert is facing and returns that tile
@@ -89,17 +96,19 @@ public class PlayerController extends ObjectController implements Obstructing {
 	
 	@Override
 	public void processInput(int keyPressed) {
-		switch (keyPressed) {
-			case Input.WALK_NORTH: 	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.NORTH);
-									break;
-			case Input.WALK_EAST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.EAST);
-									break;
-			case Input.WALK_SOUTH:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.SOUTH);
-									break;
-			case Input.WALK_WEST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.WEST);
-									break;
-			case Input.INTERACT:	((PlayerModel)model).interactWith(interactingWith);
-									break;
+		if (!blockInput) {
+			switch (keyPressed) {
+				case Input.WALK_NORTH: 	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.NORTH);
+										break;
+				case Input.WALK_EAST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.EAST);
+										break;
+				case Input.WALK_SOUTH:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.SOUTH);
+										break;
+				case Input.WALK_WEST:	if (state != WALKING) moved = ((PlayerModel)model).move(Globals.WEST);
+										break;
+				case Input.INTERACT:	((PlayerModel)model).interactWith(interactingWith);
+										break;
+			}
 		}
 		System.out.println("State: " + state);
 		System.out.println(position);
@@ -112,23 +121,32 @@ public class PlayerController extends ObjectController implements Obstructing {
 	@Override
 	public boolean update(float delta) {
 		boolean advanceAnim = false;
-		if (++deltaState > 2 && moved) {
+		if (state != IDLE && state != INTERACTING) blockInput = true;
+		else blockInput = false;
+		if (++deltaState > 2 && (state == INIT_CARRYING || moved)) {
 			stateFrame++;
 			deltaState = 0;
 			advanceAnim = true;
 		} else if (!moved) state = IDLE;
-		if (state == WALKING && stateFrame >= AnimatedAssets.numWalkingFrames) {
+		if ((state == WALKING || state == SLIDING) && stateFrame == AnimatedAssets.numWalkingFrames - 1) {
+			if (position.getTile().isSlippery()) moved = ((PlayerModel)model).slide(facing);
+		}
+		if ((state == WALKING || state == SLIDING) && stateFrame >= AnimatedAssets.numWalkingFrames) {
+			state = IDLE;
+			resetState();
+		}
+		if (state == INIT_CARRYING && stateFrame >= AnimatedAssets.numPickUpFrames) {
 			state = IDLE;
 			resetState();
 		}
 		updateView();
 		return advanceAnim;
-		//return true;
 	}
 	
 	@Override
 	protected void updateView() {
-		((PlayerView)view).update(state, facing, stateFrame);
+		//((PlayerView)view).update(state, facing, stateFrame);
+		((PlayerView)view).update(state, facing, stateFrame, carrying);
 	}
 	
 	@Override

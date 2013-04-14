@@ -16,13 +16,13 @@ import com.theboxbrigade.quantumchaos.views.BoxView;
 public class BoxController extends ObjectController implements Interactable, Obstructing {
 	public static final int OPEN = 0;
 	public static final int CLOSED = 1;
-	public static final int OPEN_INTERACTING = 2;
 	protected Position position;
 	protected int color;
 	protected float x;
 	protected float y;
 	public int state = CLOSED;
 	private DialogBox dialogBox;
+	private String dialogBoxText;
 	private TileManager tileManager;
 	
 	private int worldToTravelTo;
@@ -35,6 +35,14 @@ public class BoxController extends ObjectController implements Interactable, Obs
 		view = new BoxView(color);
 		
 		this.color = color;
+		if (color == BoxView.RED) {
+			dialogBox = new YesNoDialogBox(Assets.redBoxOpen, "Travel to World?");
+			dialogBoxText = ("Travel to Newton's World?");
+		} else if (color == BoxView.GREEN) {
+			dialogBox = new YesNoDialogBox(Assets.greenBoxOpen, "Travel to World?");
+			dialogBoxText = ("Travel to Galileo's World?");
+		}
+		dialogBox.setUseGeneratedPortrait(false);
 	}
 	
 	public void setPosition(Tile t) {
@@ -51,6 +59,16 @@ public class BoxController extends ObjectController implements Interactable, Obs
 	
 	public DialogBox getDialogBox() {
 		return dialogBox;
+	}
+	public String getDialogBoxText() {
+		return dialogBoxText;
+	}
+	
+	public Sprite getDialogBoxPortrait() {
+		if (color == BoxView.RED) return Assets.redBoxOpen;
+		else if (color == BoxView.GREEN) return Assets.greenBoxOpen;
+		else if (color == BoxView.BLUE) return Assets.blueBoxOpen;
+		return null;
 	}
 	
 	public void setState(int state) { this.state = state; }
@@ -73,13 +91,9 @@ public class BoxController extends ObjectController implements Interactable, Obs
 	
 	@Override
 	public boolean update(float delta) {
-		if (state == OPEN || state == OPEN_INTERACTING) {
-			Sprite tmp = Assets.redBoxOpen;
-			if (color == BoxView.GREEN) tmp = Assets.greenBoxOpen;
-			else if (color == BoxView.BLUE) tmp = Assets.blueBoxOpen;
-			dialogBox = new YesNoDialogBox(tmp, "Travel to World?");
+		if (state == OPEN) {
 			dialogBox.setVisible(true);
-		} else dialogBox = null;
+		} else dialogBox.setVisible(false);
 		
 		updateView();
 		return false;
@@ -92,7 +106,6 @@ public class BoxController extends ObjectController implements Interactable, Obs
 
 	@Override
 	public void processInput(int input) {
-		// TODO: Auto-generated method stub
 	}
 
 	@Override
@@ -117,5 +130,10 @@ public class BoxController extends ObjectController implements Interactable, Obs
 	@Override
 	public boolean isInteractable() {
 		return true;
+	}
+
+	@Override
+	public int interactableType() {
+		return Interactable.BOX;
 	}
 }

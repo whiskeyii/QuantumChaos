@@ -22,12 +22,16 @@ public class Input implements InputProcessor {
 	
 	public static final int AFFIRM = 11;
 	
+	public static final int ANY_KEY = 12;
+	public static final int B = 13;
+	
 	public boolean[] buttons = new boolean[64];
 	public boolean[] oldButtons = new boolean[64];
 	
 	public void set(int key, boolean down) {
 		int button = -1;
 		
+		if (key == Keys.ANY_KEY) button = ANY_KEY;
 		if (key == Keys.W) button = WALK_NORTH;
 		if (key == Keys.D) button = WALK_EAST;
 		if (key == Keys.S) button = WALK_SOUTH;
@@ -43,6 +47,8 @@ public class Input implements InputProcessor {
 		if (key == Keys.DPAD_LEFT) button = DPAD_LEFT;
 		if (key == Keys.DPAD_RIGHT) button = DPAD_RIGHT;
 		
+		if (key == Keys.B) button = B;
+			
 		if (button >= 0) buttons[button] = down;
 	}
 	

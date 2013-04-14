@@ -3,6 +3,7 @@ package com.theboxbrigade.quantumchaos;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.theboxbrigade.quantumchaos.controllers.BoxController;
 import com.theboxbrigade.quantumchaos.controllers.DoorController;
 import com.theboxbrigade.quantumchaos.controllers.Interactable;
 import com.theboxbrigade.quantumchaos.controllers.KeyController;
@@ -43,14 +43,18 @@ public class Galileo1 extends World {
 	protected KeyController key;
 	protected DoorController door;
 	
+	protected PauseMenu pauseMenu = new PauseMenu();
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
+	
+	protected Music bgMusic;
 	
 	@Override
 	public void create() {
 		System.out.println("I AM HERE - GALILEO-1!");
 		Assets.load(Globals.GALILEO1);
 		
+		// Camera viewport
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, ((Globals.GAME_WIDTH * 1.0f) / (Globals.GAME_HEIGHT * 1.0f)) * 10, 10);
 		camera.zoom = 2;
@@ -59,6 +63,7 @@ public class Galileo1 extends World {
 
 		spriteBatch = new SpriteBatch();
 		
+		// Load Tiled map
 		assetManager = new AssetManager();
 		assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 		assetManager.load(mapPath + mapName + ".tmx", TiledMap.class);
@@ -66,15 +71,19 @@ public class Galileo1 extends World {
 		tileMap = assetManager.get(mapPath + mapName + ".tmx");
 		tileMapRenderer = new IsometricTiledMapRenderer(tileMap, 1f / 32f);
 		
-		notifier = new WorldNotifier();
 		tileManager = new TileManager(tileMap);
 		dialogManager = new DialogManager();
 		dialogManager.loadFile(dialogPath + dialogName);
 		
+		// Place Objects in the World
 		objects = new Array<ObjectController>();
 		populateWorld();
 		
 		nextWorld = Globals.GALILEO2;
+		bgMusic = Assets.galileoMusic;
+		bgMusic.setVolume(0.2f);
+		bgMusic.setLooping(true);
+		bgMusic.play();
 	}
 
 	@Override
@@ -122,42 +131,64 @@ public class Galileo1 extends World {
 				dialogBox.update();
 			spriteBatch.end();
 		}
+		
+		// Pause Menu
+		spriteBatch = pauseMenu.getSpriteBatch();
+		spriteBatch.begin();
+			pauseMenu.update();
+		spriteBatch.end();
 	}
 	
 	@Override
 	public void parseInput(Input input) {
-		if (input.buttons[Input.WALK_NORTH]) {
-			robert.processInput(Input.WALK_NORTH);
-		} else if (input.buttons[Input.WALK_EAST]) {
-			robert.processInput(Input.WALK_EAST);
-		} else if (input.buttons[Input.WALK_SOUTH]) {
-			robert.processInput(Input.WALK_SOUTH);
-		} else if (input.buttons[Input.WALK_WEST]) {
-			robert.processInput(Input.WALK_WEST);
-		} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
-			Interactable tmp = (Interactable)robert.getTileInFrontOfPlayer().getObstructing();
-			if (tmp != null) {
-				robert.setInteractable(tmp);
-				robert.processInput(Input.INTERACT);
-				tmp = null; 
+		/* Pause Menu Input */
+		if (input.buttons[Input.ESCAPE] && !input.oldButtons[Input.ESCAPE]) {
+			if (pauseMenu.isVisible()) {
+				if (pauseMenu.isSeeControls()) pauseMenu.processInput(Input.ESCAPE);
+				else pauseMenu.setVisible(false);
 			}
-			handleDropPlanet();
-			input.releaseAllKeys();
+			else pauseMenu.setVisible(true);
+		} else if (input.buttons[Input.DPAD_UP] && !input.oldButtons[Input.DPAD_UP]) {
+			if (pauseMenu.isVisible()) pauseMenu.processInput(Input.DPAD_UP);
+		} else if (input.buttons[Input.DPAD_DOWN] && !input.oldButtons[Input.DPAD_DOWN]) {
+			if (pauseMenu.isVisible()) pauseMenu.processInput(Input.DPAD_DOWN);
 		} else if (input.buttons[Input.AFFIRM] && !input.oldButtons[Input.AFFIRM]) {
-			if (showDialog) {
-				int choice = ((YesNoDialogBox)dialogBox).processInput(Input.AFFIRM);
-				if (choice == YesNoDialogBox.YES_SELECTED) readyToLeave = true;
-			}
+			if (pauseMenu.isVisible()) pauseMenu.processInput(Input.AFFIRM);
 		}
+		processPauseInput();
 		
-		checkCarryingPlanet();
-		drawPlanetOverPlayer();
-		if (!puzzleComplete) checkPuzzleComplete();
-		checkDoorUnlockable();
-	}
-	
-	protected int getWorldToTravelTo(BoxController box) {
-		return box.getWorldToTravelTo();
+		/* Gameplay Input */
+		if (!pauseMenu.isVisible()) {
+			if (input.buttons[Input.WALK_NORTH]) {
+				robert.processInput(Input.WALK_NORTH);
+			} else if (input.buttons[Input.WALK_EAST]) {
+				robert.processInput(Input.WALK_EAST);
+			} else if (input.buttons[Input.WALK_SOUTH]) {
+				robert.processInput(Input.WALK_SOUTH);
+			} else if (input.buttons[Input.WALK_WEST]) {
+				robert.processInput(Input.WALK_WEST);
+			} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
+				Interactable tmp = (Interactable)robert.getTileInFrontOfPlayer().getObstructing();
+				if (tmp != null) {
+					robert.setInteractable(tmp);
+					robert.processInput(Input.INTERACT);
+					tmp = null; 
+				}
+				handleDropPlanet();
+				input.releaseAllKeys();
+			} else if (input.buttons[Input.AFFIRM] && !input.oldButtons[Input.AFFIRM]) {
+				if (showDialog) {
+					int choice = ((YesNoDialogBox)dialogBox).processInput(Input.AFFIRM);
+					if (choice == YesNoDialogBox.YES_SELECTED) readyToLeave = true;
+				}
+			}
+		
+			checkCarryingPlanet();
+			drawPlanetOverPlayer();
+			if (!puzzleComplete) checkPuzzleComplete();
+			checkDoorUnlockable();
+			checkReadyToLeave();
+		}
 	}
 	
 	/**
@@ -281,7 +312,7 @@ public class Galileo1 extends World {
 		
 		key = new KeyController(tileManager, -1);
 		key.setPosition(tileManager.getTile(13,6));
-		key.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.0f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 4.0f);
+		key.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.25f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 5.5f);
 		key.setObstructing(false);
 		objects.add(key);
 	}
@@ -405,6 +436,23 @@ public class Galileo1 extends World {
 		return null;
 	}
 
+	protected void processPauseInput() {
+		switch (pauseMenu.selected) {
+			case PauseMenu.RESUME:			pauseMenu.setVisible(false);
+											break;
+			case PauseMenu.RETURN_TO_HUB:	readyToLeave = true;
+											nextWorld = Globals.THE_HUB;
+											break;
+			case PauseMenu.CONTROLS:		if (!pauseMenu.isSeeControls()) pauseMenu.setSeeControls(true);
+											else pauseMenu.setSeeControls(false);
+											pauseMenu.selected = -1;
+											break;
+			case PauseMenu.MAIN_MENU:		readyToLeave = true;
+											nextWorld = Globals.MAIN_MENU;
+											break;
+		}
+	}
+	
 	protected void checkDoorUnlockable() {
 		if (key.state == KeyController.PICKED_UP) {
 			if (!door.isUnlockable()) {
@@ -414,9 +462,16 @@ public class Galileo1 extends World {
 		}
 	}
 	
+	protected void checkReadyToLeave() {
+		if (robert.getPosition().getTile().equals(tileManager.getTile(11, 3))) {
+			readyToLeave = true;
+		}
+	}
+	
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		assetManager.clear();
+		if (nextWorld != Globals.GALILEO2) bgMusic.stop();
+		Assets.unload(Globals.GALILEO1);
 	}
 }

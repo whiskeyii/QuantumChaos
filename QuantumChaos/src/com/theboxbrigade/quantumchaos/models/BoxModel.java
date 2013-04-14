@@ -16,12 +16,8 @@ public class BoxModel extends Model {
 		open = !open;
 		if (open) state = BoxController.OPEN;
 		else state = BoxController.CLOSED;
-		Assets.chestOpen.play();
-		sync();
-	}
-	
-	public void enterBox() {
-		state = BoxController.OPEN_INTERACTING;
+		if (open) Assets.chestOpen.play();
+		else Assets.chestClose.play();
 		sync();
 	}
 	

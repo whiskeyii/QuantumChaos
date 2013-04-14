@@ -63,4 +63,9 @@ public class PlanetSlot implements Interactable {
 	public boolean isInteractable() {
 		return true;
 	}
+
+	@Override
+	public int interactableType() {
+		return Interactable.PLANET_SLOT;
+	}
 }

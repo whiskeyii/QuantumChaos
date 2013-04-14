@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
+ <tileset firstgid="1" name="Galileo2" tilewidth="128" tileheight="64">
+  <image source="Galileo2.png" width="256" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="walkable" value="false"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjZmBgYB7FgwozomFC4tj0E2MWsfoJqSFGDt0d5OgnJfwotZ+QWmq4h1768WEAjMsCrw==
+  </data>
+ </layer>
+</map>

@@ -81,6 +81,11 @@ public class TileManager {
 								tiles[layer][col][row].setWalkable(true);
 							}
 						}
+						if (tiles[layer][col][row].getProperties().get("type") != null) {
+							if (tiles[layer][col][row].getProperties().get("type").equals("ice")) {
+								tiles[layer][col][row].setSlippery(true);
+							}
+						}
 					}
 				}
 			}

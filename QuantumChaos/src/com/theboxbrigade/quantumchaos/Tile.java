@@ -19,6 +19,7 @@ public class Tile implements TiledMapTile {
 	protected int yIndex;
 	protected boolean walkable;
 	protected boolean obstructed;
+	protected boolean slippery;
 	protected Obstructing obstructing;
 	protected MapProperties properties;
 	protected TextureRegion textureRegion;
@@ -70,6 +71,14 @@ public class Tile implements TiledMapTile {
 	
 	public void setObstructed(boolean obstructed) {
 		this.obstructed = obstructed;
+	}
+	
+	public boolean isSlippery() {
+		return slippery;
+	}
+	
+	public void setSlippery(boolean slippery) {
+		this.slippery = slippery;
 	}
 	
 	public void setObstructing(Obstructing obs) {

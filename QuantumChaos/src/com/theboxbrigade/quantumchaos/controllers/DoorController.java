@@ -116,4 +116,9 @@ public class DoorController extends ObjectController implements Interactable, Ob
 		return false;
 	}
 
+	@Override
+	public int interactableType() {
+		return Interactable.DOOR;
+	}
+
 }

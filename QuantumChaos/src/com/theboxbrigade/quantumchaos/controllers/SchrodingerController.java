@@ -117,4 +117,9 @@ public class SchrodingerController extends ObjectController implements Interacta
 	public boolean isInteractable() {
 		return true;
 	}
+
+	@Override
+	public int interactableType() {
+		return Interactable.SCHRODINGER;
+	}
 }

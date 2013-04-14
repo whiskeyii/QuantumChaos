@@ -48,14 +48,44 @@ public class PlayerModel extends CharacterModel {
 								break;
 		}
 		sync();
-		if (!moved) Assets.walkIntoWall.play();
+		if (!moved) {
+			Assets.step.stop();
+			Assets.walkIntoWall.play();
+		}
 		else Assets.step.play();
+		return moved;
+	}
+	
+	public boolean slide(int direction) {
+		face(direction);
+		//oldState = state;
+		state = PlayerController.SLIDING;
+		boolean moved = false;
+		switch (direction) {
+			case Globals.NORTH: moved = ((PlayerController)controller).getPosition().shiftVerticallyBy(-1,true);
+								break;
+			case Globals.EAST:	moved = ((PlayerController)controller).getPosition().shiftHorizontallyBy(1,true);
+								break;
+			case Globals.SOUTH: moved = ((PlayerController)controller).getPosition().shiftVerticallyBy(1,true);
+								break;
+			case Globals.WEST: 	moved = ((PlayerController)controller).getPosition().shiftHorizontallyBy(-1,true);
+								break;
+		}
+		sync();
+		if (!moved) {
+			Assets.slide.stop();
+			Assets.walkIntoWall.play();
+		}
+		else Assets.slide.play();
 		return moved;
 	}
 	
 	public void interactWith(Interactable interactable) {
 		oldState = state;
 		state = PlayerController.INTERACTING;
+		if (interactable.interactableType() == Interactable.PLANET
+				|| interactable.interactableType() == Interactable.KEY)
+			state = PlayerController.INIT_CARRYING;
 		interactable.whenInteractedWith();
 		sync();
 	}

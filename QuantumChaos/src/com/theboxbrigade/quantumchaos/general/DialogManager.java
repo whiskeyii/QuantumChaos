@@ -36,7 +36,7 @@ public class DialogManager {
 	}
 	
 	public String getString() {
-		if (it.hasNext()) {
+		if (it != null && it.hasNext()) {
 			currentString = (String)it.next();
 			return currentString;
 		}
