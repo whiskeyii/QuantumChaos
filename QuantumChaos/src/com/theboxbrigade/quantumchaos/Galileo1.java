@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.theboxbrigade.quantumchaos.controllers.DoorController;
 import com.theboxbrigade.quantumchaos.controllers.Interactable;
+import com.theboxbrigade.quantumchaos.controllers.JournalPageController;
 import com.theboxbrigade.quantumchaos.controllers.KeyController;
 import com.theboxbrigade.quantumchaos.controllers.ObjectController;
 import com.theboxbrigade.quantumchaos.controllers.PlanetController;
@@ -31,7 +32,6 @@ public class Galileo1 extends World {
 	protected final String dialogPath = "data/dialog/";
 	protected final String dialogName = "Galileo1.txt";
 	
-	protected WorldNotifier notifier;
 	protected TileManager tileManager;
 	protected DialogManager dialogManager;
 	
@@ -42,6 +42,7 @@ public class Galileo1 extends World {
 	protected boolean puzzleComplete = false;
 	protected KeyController key;
 	protected DoorController door;
+	protected JournalPageController journalPage;
 	
 	protected PauseMenu pauseMenu = new PauseMenu();
 	protected boolean showDialog;
@@ -315,6 +316,13 @@ public class Galileo1 extends World {
 		key.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.25f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 5.5f);
 		key.setObstructing(false);
 		objects.add(key);
+		
+		// Journal Page
+		journalPage = new JournalPageController(tileManager, "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.");
+		journalPage.setPosition(tileManager.getTile(11,6));
+		journalPage.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 2.75f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 6.5f);
+		journalPage.setObstructing(false);
+		objects.add(journalPage);
 	}
 	
 	/**
@@ -329,10 +337,14 @@ public class Galileo1 extends World {
 				break;
 			}
 		}
+		//if (true) {
 		if (puzzleComplete) {
 			key.setObstructing(true);
 			key.setVisible(true);
 			key.setInteractable(true);
+			journalPage.setObstructing(true);
+			journalPage.setVisible(true);
+			journalPage.setInteractable(true);
 			Assets.planetPuzzleComplete.play();
 		}
 	}
@@ -341,9 +353,9 @@ public class Galileo1 extends World {
 	 * Check if Robert has just picked up a planet
 	 */
 	protected void checkCarryingPlanet() {
-		for (PlanetController planet : planets) {
-			if (planet.state == PlanetController.IN_HANDS) {
-				if (!robert.isCarrying()) {
+		if (!robert.isCarrying()) {
+			for (PlanetController planet : planets) {
+				if (planet.state == PlanetController.IN_HANDS) {
 					Assets.planetPickUp.play();
 					robert.setCarrying(true);
 					robert.setCarryable(planet);
@@ -400,7 +412,7 @@ public class Galileo1 extends World {
 				robert.setCarrying(false);
 				robert.setCarryable(null);
 			}
-		}
+		} else System.out.println("Already a planet here");
 	}
 	
 	/**

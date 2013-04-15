@@ -90,12 +90,6 @@ public class PlayerModel extends CharacterModel {
 		sync();
 	}
 	
-	public void teleport() {
-		oldState = state;
-		state = PlayerController.TELEPORTING;
-		sync();
-	}
-	
 	public void carry(Carryable itemCarried) {
 		this.itemCarried = itemCarried;
 		((PlayerController)controller).setCarrying(true);

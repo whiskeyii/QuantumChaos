@@ -63,7 +63,6 @@ public class PauseMenu {
 	}
 	
 	protected void draw() {
-		// TODO:
 		// Draw background
 		// Draw options in white
 		// Draw selected option in blue

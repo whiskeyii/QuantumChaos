@@ -2,7 +2,6 @@ package com.theboxbrigade.quantumchaos;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.theboxbrigade.quantumchaos.general.Assets;
@@ -48,7 +47,7 @@ public class MainMenuScreen extends Screen {
 	}
 	
 	private void displayText() {
-		String text = "Press any key to play";
+		String text = "Press ENTER to play";
 		if (increasing) {
 			if (textAlpha >= 1.0f) {
 				increasing = false;

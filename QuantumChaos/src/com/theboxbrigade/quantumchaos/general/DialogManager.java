@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class DialogManager {
 	private Array<String> dialog;
-	private Iterator it;
+	private Iterator<String> it;
 	private String currentString;
 	
 	public DialogManager() {

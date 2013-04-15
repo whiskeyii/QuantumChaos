@@ -8,7 +8,6 @@ import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.models.N2ChunkModel;
 import com.theboxbrigade.quantumchaos.views.N2ChunkView;
-import com.theboxbrigade.quantumchaos.views.StalagmiteView;
 
 public class N2ChunkController extends ObjectController implements Obstructing, Interactable {
 	public static final int STATIC = 0;
@@ -112,8 +111,10 @@ public class N2ChunkController extends ObjectController implements Obstructing, 
 
 	@Override
 	public void whenInteractedWith() {
+		System.out.println("Facing: " + playerFacing);
 		boolean moved = false;
 		moveDuration = 0;
+		System.out.println("Old Position: " + position);
 		if (type <= MEDIUM) {
 			moved = ((N2ChunkModel)model).move(playerFacing);
 			if (moved) moveDuration += 4;
@@ -126,6 +127,7 @@ public class N2ChunkController extends ObjectController implements Obstructing, 
 		}
 		if (type != SMALL) type++;
 		((N2ChunkView)view).setType(type);
+		System.out.println("New Position: " + position);
 	}
 
 	@Override

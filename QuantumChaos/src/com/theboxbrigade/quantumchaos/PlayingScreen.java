@@ -1,7 +1,5 @@
 package com.theboxbrigade.quantumchaos;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;

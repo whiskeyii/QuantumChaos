@@ -151,6 +151,8 @@ public class TheHub extends World {
 			
 		/* Gameplay Input */
 		if (!pauseMenu.isVisible()) {
+			closeInactiveDialog();
+			
 			if (input.buttons[Input.WALK_NORTH]) {
 				robert.processInput(Input.WALK_NORTH);
 			} else if (input.buttons[Input.WALK_EAST]) {
@@ -164,7 +166,7 @@ public class TheHub extends World {
 				if (tmp != null) {
 					robert.setInteractable(tmp);
 					robert.processInput(Input.INTERACT);
-					tmp = null; 
+					tmp = null;
 				}
 				input.releaseAllKeys();
 			} else if ((input.buttons[Input.DPAD_DOWN] && !input.oldButtons[Input.DPAD_DOWN])
@@ -187,7 +189,7 @@ public class TheHub extends World {
 			checkOpenBox();
 			checkSchrodingerTalking();
 			closeInactiveBoxes();
-			closeInactiveDialog();
+			//closeInactiveDialog();
 		}
 	}
 
@@ -202,7 +204,7 @@ public class TheHub extends World {
 			dialogBox.setPortraitOffsets(0, 0);
 			((YesNoDialogBox)dialogBox).setShowYesNo(false);
 		}
-		if (robert.state != PlayerController.INTERACTING)
+		if (robert.state != PlayerController.INTERACTING && robert.state != PlayerController.IDLE)
 			schrodinger.setState(SchrodingerController.IDLE);
 	}
 
@@ -240,7 +242,7 @@ public class TheHub extends World {
 	}
 	
 	protected void closeInactiveBoxes() {
-		if (robert.state != PlayerController.INTERACTING) {
+		if (robert.state != PlayerController.INTERACTING && robert.state != PlayerController.IDLE) {
 			if (redBox.isOpen()) redBox.whenInteractedWith();
 			if (greenBox.isOpen()) greenBox.whenInteractedWith();
 		}

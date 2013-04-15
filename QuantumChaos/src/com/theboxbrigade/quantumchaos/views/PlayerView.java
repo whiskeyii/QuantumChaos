@@ -2,10 +2,8 @@ package com.theboxbrigade.quantumchaos.views;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.theboxbrigade.quantumchaos.controllers.PlayerController;
 import com.theboxbrigade.quantumchaos.general.AnimatedAssets;
-import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 
 /**
@@ -14,20 +12,17 @@ import com.theboxbrigade.quantumchaos.general.Globals;
  * @author Jason
  */
 public class PlayerView extends CharacterView {
-	private int state;
 	private Sprite player;
 	private SpriteBatch spriteBatch = new SpriteBatch();
 	
 	@Override
 	public void update(int state) {
-		this.state = state;
 		AnimatedAssets.setState(state);
 		player = AnimatedAssets.robertCurrentFrame;
 		draw(player, Globals.GAME_WIDTH/2, Globals.GAME_HEIGHT/2);
 	}
 	
 	public void update(int state, int facingDir, int stateFrame) {
-		this.state = state;
 		switch (state) {
 			case PlayerController.IDLE:			player = AnimatedAssets.getFrame(facingDir, 0);
 												break;
@@ -46,7 +41,6 @@ public class PlayerView extends CharacterView {
 	}
 	
 	public void update(int state, int facingDir, int stateFrame, boolean carrying) {
-		this.state = state;
 		switch (state) {
 			case PlayerController.IDLE:			if (carrying)
 													player = AnimatedAssets.getFrame(PlayerController.CARRYING, facingDir, 0);

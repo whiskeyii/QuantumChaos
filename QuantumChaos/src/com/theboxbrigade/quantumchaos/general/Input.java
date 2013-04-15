@@ -1,6 +1,5 @@
 package com.theboxbrigade.quantumchaos.general;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
@@ -32,12 +31,16 @@ public class Input implements InputProcessor {
 		int button = -1;
 		
 		if (key == Keys.ANY_KEY) button = ANY_KEY;
-		if (key == Keys.W) button = WALK_NORTH;
-		if (key == Keys.D) button = WALK_EAST;
-		if (key == Keys.S) button = WALK_SOUTH;
-		if (key == Keys.A) button = WALK_WEST;
+		//if (key == Keys.W) button = WALK_NORTH;
+		//if (key == Keys.D) button = WALK_EAST;
+		//if (key == Keys.S) button = WALK_SOUTH;
+		//if (key == Keys.A) button = WALK_WEST;
+		if (key == Keys.W) button = WALK_WEST;
+		if (key == Keys.D) button = WALK_NORTH;
+		if (key == Keys.S) button = WALK_EAST;
+		if (key == Keys.A) button = WALK_SOUTH;
 		
-		if (key == Keys.E) button = INTERACT;
+		if (key == Keys.Q) button = INTERACT;
 		if (key == Keys.SPACE) button = ATTACK;
 		if (key == Keys.ESCAPE) button = ESCAPE;
 		if (key == Keys.ENTER) button = AFFIRM;

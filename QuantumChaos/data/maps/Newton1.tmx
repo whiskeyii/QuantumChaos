@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
  <tileset firstgid="1" name="Newto" tilewidth="128" tileheight="64">
-  <image source="Newton1.png" width="256" height="256"/>
+  <image source="Newton1.png" width="2048" height="2048"/>
   <tile id="0">
    <properties>
     <property name="walkable" value="true"/>
@@ -18,10 +18,26 @@
     <property name="walkable" value="false"/>
    </properties>
   </tile>
+  <tile id="16">
+   <properties>
+    <property name="type" value="ice"/>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjZWBgYB3FGJiRAr3MUP3MBDA+/cTgUf200U9M3A20+ylJn8gYANPQBC8=
+   eJxjZ2BgYB/FGJiRAr2CUP2CBDA+/cTgUf200U9M3A20+ylJn8gYAIh9CrM=
+  </data>
+ </layer>
+ <layer name="WallLeft" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJyljT0OglAQBqm4ATa2akErmND6Q2hF1FpAesULICdALuy+ZC6w+75kMtvMe2Hgt6Ww8OgjvDH2sbDm3hn6FU5xruwzIeE+4Zui3+Ijvgqdoi+EA3eFn4p+jy+4VbRud6HkbvBH0Z9xjXvl/24P/Maj4Y0X/gqzoXcb8M/Yu00erWV/2Y0NNA==
+  </data>
+ </layer>
+ <layer name="WallRight" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJzbzsDAsAmITwDxYSC+CcRXgPgVED8F4t9A/A2IeRgZcILjUPoGlH4JpX9BaW6oXhk8ZlyH0i+g9E8ozQXVIw2ldfCY8RxK/4DSnFC1UlBaG0rb4DHjO5TmgKqRhNJaUNoaSvvgMYMdKicBpTWhtBWU9sajdxSMAnoCAAlsFDM=
   </data>
  </layer>
 </map>

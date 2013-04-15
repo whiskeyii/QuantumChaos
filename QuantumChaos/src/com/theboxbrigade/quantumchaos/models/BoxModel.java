@@ -1,6 +1,5 @@
 package com.theboxbrigade.quantumchaos.models;
 
-import com.badlogic.gdx.audio.Sound;
 import com.theboxbrigade.quantumchaos.controllers.BoxController;
 import com.theboxbrigade.quantumchaos.general.Assets;
 

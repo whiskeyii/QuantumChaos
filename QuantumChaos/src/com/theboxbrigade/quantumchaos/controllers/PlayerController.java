@@ -1,7 +1,5 @@
 package com.theboxbrigade.quantumchaos.controllers;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.Carryable;
 import com.theboxbrigade.quantumchaos.Obstructing;
 import com.theboxbrigade.quantumchaos.Position;
@@ -10,10 +8,8 @@ import com.theboxbrigade.quantumchaos.TileManager;
 import com.theboxbrigade.quantumchaos.general.AnimatedAssets;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
-import com.theboxbrigade.quantumchaos.models.Model;
 import com.theboxbrigade.quantumchaos.models.PlayerModel;
 import com.theboxbrigade.quantumchaos.views.PlayerView;
-import com.theboxbrigade.quantumchaos.views.View;
 
 /**
  * Create this object in a World to get the MVC structure for a Player object (Robert)

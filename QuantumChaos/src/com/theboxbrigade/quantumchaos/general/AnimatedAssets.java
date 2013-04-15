@@ -128,23 +128,6 @@ public class AnimatedAssets {
 		}
 	}
 	
-	private static void setCurrentFrame(int state, int facing) {
-		if (state == Globals.PICKUP) {
-			switch (facing) {
-			case Globals.NORTH: robertCurrentFrame = pickUpNorthFrames[robertCurrentFrameNum];
-								break;
-			case Globals.EAST: 	robertCurrentFrame = pickUpEastFrames[robertCurrentFrameNum];
-								break;
-			case Globals.SOUTH: robertCurrentFrame = pickUpSouthFrames[robertCurrentFrameNum];
-								break;
-			case Globals.WEST: 	robertCurrentFrame = pickUpWestFrames[robertCurrentFrameNum];
-								break;
-			}
-		} else if (state == Globals.WALK) {
-			setCurrentFrame(facing);
-		}
-	}
-	
 	public static Sprite load(String name, int x, int y, int width, int height, boolean flipY) {
 		Texture texture = new Texture(Gdx.files.internal(name));
 		Sprite region = new Sprite(texture, x, y, width, height);

@@ -1,7 +1,5 @@
 package com.theboxbrigade.quantumchaos.general;
 
-import com.badlogic.gdx.Gdx;
-
 public class Globals {
 	public static final int GAME_WIDTH = 1024;
 	public static final int GAME_HEIGHT = 768;

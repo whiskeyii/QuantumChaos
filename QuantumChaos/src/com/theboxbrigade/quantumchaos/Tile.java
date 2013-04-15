@@ -6,15 +6,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.theboxbrigade.quantumchaos.controllers.Interactable;
 
 public class Tile implements TiledMapTile {
-	private static final int TYPE_NULL = 0;
-	private static final int TYPE_ICE = 1;
-	private static final int TYPE_SAND = 2;
-	private static final int TYPE_METAL = 3;
-	private static final int TYPE_SPACE = 4;
-	private static final int TYPE_WALL = 5;
 	protected static int numTiles = 0;
 	protected int id;
-	protected int type;
 	protected int xIndex;
 	protected int yIndex;
 	protected boolean walkable;
@@ -26,7 +19,6 @@ public class Tile implements TiledMapTile {
 	
 	public Tile(int xIndex, int yIndex) {
 		this.id = numTiles++;
-		this.type = TYPE_NULL;
 		this.xIndex = xIndex;
 		this.yIndex = yIndex;
 	}
@@ -35,10 +27,6 @@ public class Tile implements TiledMapTile {
 		this(0,0);
 		this.properties = tile.getProperties();
 		this.textureRegion = tile.getTextureRegion();
-	}
-	
-	public int getType() {
-		return type;
 	}
 	
 	public int getX() {
@@ -99,14 +87,11 @@ public class Tile implements TiledMapTile {
 	
 	@Override
 	public BlendMode getBlendMode() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void setBlendMode(BlendMode blendMode) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

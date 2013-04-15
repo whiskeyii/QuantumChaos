@@ -158,7 +158,7 @@ public class Newton2 extends World {
 				robert.processInput(Input.WALK_WEST);
 			} else if (input.buttons[Input.INTERACT] && !input.oldButtons[Input.INTERACT]) {
 				Interactable tmp = (Interactable)robert.getTileInFrontOfPlayer().getObstructing();
-				if (tmp != null) {
+				if (tmp != null && tmp.interactableType() != Interactable.N2_CHUNK) {
 					robert.setInteractable(tmp);
 					robert.processInput(Input.INTERACT);
 					tmp = null; 

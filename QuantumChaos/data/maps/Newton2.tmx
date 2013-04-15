@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="isometric" width="16" height="16" tilewidth="128" tileheight="64">
  <tileset firstgid="1" name="Newton2" tilewidth="128" tileheight="64">
-  <image source="Newton1.png" trans="ffffff" width="256" height="256"/>
+  <image source="Newton1.png" trans="ffffff" width="2048" height="2048"/>
   <tile id="0">
    <properties>
     <property name="walkable" value="true"/>
@@ -13,10 +13,40 @@
     <property name="walkable" value="true"/>
    </properties>
   </tile>
+  <tile id="16">
+   <properties>
+    <property name="type" value="ice"/>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
  </tileset>
- <layer name="Tile Layer 1" width="16" height="16">
+ <tileset firstgid="513" name="Newton2" tilewidth="128" tileheight="64">
+  <image source="Newton2.png" trans="ffffff" width="2048" height="2048"/>
+  <tile id="0">
+   <properties>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="type" value="ice"/>
+    <property name="walkable" value="true"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Floor" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjZWBgYB3FVMXMRGJsehmhmFz9lNo/qn9w62dEoqmRVgHXYAQv
+   eJxjYmJgYBrFVMWCRGJsehmhmFz9lNo/qn9w62dEoqmRVgF/GAms
+  </data>
+ </layer>
+ <layer name="WallLeft" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjY2KgCEgD9YtRYIYoVK8amWZoAfWpQvWakWGGClSPKZR2I9EMS6B6E6geVygdRoIZxlC1LlA6lET7PYDqnaF6QqB0KglmOEHVBkPpFBLtDweqD4LqSYbSJSSYEQhVmwSli8mIw0SoniIo3UyGGYVQPU0UpOVGqN5JFJgxkcL8SCoAAAwJDIs=
+  </data>
+ </layer>
+ <layer name="WallRight" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJzbzsTAsAmITwDxYSC+CcRXgPgVED8F4t9A/A2IeZgZcILjTBD6BpR+CaV/QWluqF4ZPGZch6p9AaV/QmkuqB5pKK2Dx4znUD0/oDQnVK0UlNaG0jZ4zPgO1csBVSMJpbWgtDWU9sFjBjtUTgJKa0JpKyjtjUfvKBgF9AQAFesUgw==
   </data>
  </layer>
 </map>

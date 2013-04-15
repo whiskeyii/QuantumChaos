@@ -27,7 +27,6 @@ public class Galileo2 extends World {
 	protected final String dialogPath = "data/dialog/";
 	protected final String dialogName = "Galileo2.txt";
 	
-	protected WorldNotifier notifier;
 	protected TileManager tileManager;
 	protected DialogManager dialogManager;
 	
@@ -60,7 +59,6 @@ public class Galileo2 extends World {
 		tileMap = assetManager.get(mapPath + mapName + ".tmx");
 		tileMapRenderer = new IsometricTiledMapRenderer(tileMap, 1f / 32f);
 		
-		notifier = new WorldNotifier();
 		tileManager = new TileManager(tileMap);
 		dialogManager = new DialogManager();
 		dialogManager.loadFile(dialogPath + dialogName);

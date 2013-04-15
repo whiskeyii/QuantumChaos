@@ -32,7 +32,13 @@ public class Position {
 			if (tmpTile.isObstructed()) return false;
 			if (checkForWalkable) {
 				if (tmpTile.isWalkable())
-					tile = tmpTile;
+					if (tile.isObstructed()) {
+						tile.setObstructed(false);
+						tile = tmpTile;
+						tile.setObstructed(true);
+					} else {
+						tile = tmpTile;
+					}
 				else { return false; }
 			}
 		} else { return false; }

@@ -28,6 +28,7 @@ public class Assets {
 	public static Sprite redBoxClosed, redBoxOpen;
 	public static Sprite redKey, greenKey, blueKey, silverKey;
 	public static Sprite doorW, doorN;
+	public static Sprite journalPage, journalPageLarge;
 	public static Sprite dialogBoxBG, pauseBG;
 	
 	// Galileo's World
@@ -38,6 +39,7 @@ public class Assets {
 	
 	/*********** FONT(S) **********/
 	public static BitmapFont font;
+	public static BitmapFont journalFont;
 	
 	/******* SOUNDS & MUSIC *******/
 	// The Hub / Common
@@ -63,6 +65,7 @@ public class Assets {
 	public static void load() {
 		// FONT(S)
 		font = loadFont("data/fonts/8bit.fnt", "data/fonts/8bit2.png", false);
+		//journalFont = loadFont("data/fonts/fely.fnt", "data/fonts/fely.png", false);
 		
 		// IMAGES
 		teamLogo = load("data/images/BoxBrigadeLogo.png", 512, 512);
@@ -85,6 +88,8 @@ public class Assets {
 		blueKey = load("data/images/keys.png", 78, 0, 26, 57, false);
 		doorW = load("data/images/doors.png", 0, 0, 70, 128, false);
 		doorN = load("data/images/doors.png", 70, 0, 70, 128, false);
+		journalPage = load("data/images/journal_page.png", 0, 0, 128, 128, false);
+		journalPageLarge = load("data/images/journal_page_large.png", 0, 0, 512, 512, false);
 		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
 		pauseBG = load("data/images/pause_bg.png", 0, 0, 1024, 768, false);
 		

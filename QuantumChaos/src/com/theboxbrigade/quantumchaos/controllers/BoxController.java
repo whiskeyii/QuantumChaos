@@ -1,7 +1,6 @@
 package com.theboxbrigade.quantumchaos.controllers;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.DialogBox;
 import com.theboxbrigade.quantumchaos.Obstructing;
 import com.theboxbrigade.quantumchaos.Position;
@@ -9,7 +8,6 @@ import com.theboxbrigade.quantumchaos.Tile;
 import com.theboxbrigade.quantumchaos.TileManager;
 import com.theboxbrigade.quantumchaos.YesNoDialogBox;
 import com.theboxbrigade.quantumchaos.general.Assets;
-import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.models.BoxModel;
 import com.theboxbrigade.quantumchaos.views.BoxView;
 

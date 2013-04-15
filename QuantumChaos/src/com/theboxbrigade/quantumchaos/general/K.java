@@ -1,7 +1,5 @@
 package com.theboxbrigade.quantumchaos.general;
 
-import com.badlogic.gdx.Input.Keys;
-
 public class K {
 	private static final int[] c = {
 		Input.DPAD_UP,
