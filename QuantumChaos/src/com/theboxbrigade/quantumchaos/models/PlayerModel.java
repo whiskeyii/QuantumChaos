@@ -89,6 +89,9 @@ public class PlayerModel extends CharacterModel {
 		if (interactable.interactableType() == Interactable.JOURNAL_PAGE) {
 			((PlayerController)controller).blockInput = true;
 		}
+		if(interactable.interactableType() == Interactable.N2_CHUNK){
+			state = PlayerController.ATTACKING; 
+		}
 		interactable.whenInteractedWith();
 		sync();
 	}
@@ -106,6 +109,7 @@ public class PlayerModel extends CharacterModel {
 	public void attack() {
 		oldState = state;
 		state = PlayerController.ATTACKING;
+		System.out.println("ATTACK!");
 	}
 	
 	public void hit() {

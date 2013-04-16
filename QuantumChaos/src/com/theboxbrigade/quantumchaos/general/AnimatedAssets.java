@@ -10,12 +10,17 @@ public class AnimatedAssets {
 	private static final int FRAME_HEIGHT = 128;
 	private static final int PICKUP_Y_OFF = 512;
 	private static final int CARRY_X_OFF = 320;
+	private static final int ATTACK_Y_OFF = 513;
+	private static final int ATTACK_X_OFF = 220;
+	
 	public static int numWalkingFrames = 5;
 	public static int numPickUpFrames = 3;
+	public static int numAttackingFrames = 5;
 	private static final String robertPath = "data/images/robert_walk.png";
 	private static Sprite[] robertWalkNorthFrames, robertWalkEastFrames, robertWalkSouthFrames, robertWalkWestFrames;
 	private static Sprite[] pickUpNorthFrames, pickUpEastFrames, pickUpSouthFrames, pickUpWestFrames;
 	private static Sprite[] carryNorthFrames, carryEastFrames, carrySouthFrames, carryWestFrames;
+	private static Sprite[] attackNorthFrames, attackEastFrames, attackSouthFrames, attackWestFrames;
 	public static int robertCurrentFrameNum = -1;
 	public static Sprite robertCurrentFrame;
 
@@ -32,6 +37,10 @@ public class AnimatedAssets {
 		carryEastFrames = new Sprite[numWalkingFrames];
 		carrySouthFrames = new Sprite[numWalkingFrames];
 		carryWestFrames = new Sprite[numWalkingFrames];
+		attackNorthFrames = new Sprite[numAttackingFrames];
+		attackEastFrames = new Sprite[numAttackingFrames];
+		attackSouthFrames = new Sprite[numAttackingFrames];
+		attackWestFrames = new Sprite[numAttackingFrames];
 		for (int i = 0; i < numWalkingFrames; i++) {
 			robertWalkNorthFrames[i] = load(robertPath, i*FRAME_WIDTH, 0, FRAME_WIDTH, FRAME_HEIGHT, false);
 			robertWalkWestFrames[i] = load(robertPath, i*FRAME_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT, false);
@@ -47,6 +56,12 @@ public class AnimatedAssets {
 			pickUpEastFrames[i] = load(robertPath, i*71, PICKUP_Y_OFF + FRAME_HEIGHT, 71, FRAME_HEIGHT, false);
 			pickUpSouthFrames[i] = load(robertPath, i*71, PICKUP_Y_OFF + 2*FRAME_HEIGHT, 71, FRAME_HEIGHT, false);
 			pickUpWestFrames[i] = load(robertPath, i*71, PICKUP_Y_OFF + 3*FRAME_HEIGHT, 71, FRAME_HEIGHT, false);
+		}
+		for(int i = 0; i < numAttackingFrames; i++){
+			attackNorthFrames[i] = load(robertPath, ATTACK_X_OFF + i*148, ATTACK_Y_OFF, 148, FRAME_HEIGHT, false);
+			attackSouthFrames[i] =  load(robertPath, ATTACK_X_OFF + i*148, ATTACK_Y_OFF + FRAME_HEIGHT, 148, FRAME_HEIGHT, false);
+			attackEastFrames[i] = load(robertPath, ATTACK_X_OFF + i*148, ATTACK_Y_OFF + 2*FRAME_HEIGHT, 148, FRAME_HEIGHT, false);
+			attackWestFrames[i] =  load(robertPath, ATTACK_X_OFF + i*148, ATTACK_Y_OFF + 3*FRAME_HEIGHT, 148, FRAME_HEIGHT, false);
 		}
 		robertCurrentFrameNum = 0;
 		robertCurrentFrame = robertWalkNorthFrames[robertCurrentFrameNum];
@@ -110,6 +125,17 @@ public class AnimatedAssets {
 											return carrySouthFrames[frame];
 				case Globals.WEST:			frame %= numWalkingFrames;
 											return carryWestFrames[frame];
+			}
+		} else if(state == PlayerController.ATTACKING){
+			switch (facing) {
+				case Globals.NORTH: 		frame %= numAttackingFrames;	
+											return attackNorthFrames[frame];
+				case Globals.EAST:			frame %= numAttackingFrames;
+											return attackEastFrames[frame];
+				case Globals.SOUTH:			frame %= numAttackingFrames;
+											return attackSouthFrames[frame];
+				case Globals.WEST:			frame %= numAttackingFrames;
+											return attackWestFrames[frame];
 			}
 		}
 		return robertCurrentFrame;

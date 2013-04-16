@@ -34,6 +34,8 @@ public class PlayerView extends CharacterView {
 												break;
 			case PlayerController.INIT_CARRYING:player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
 												break;
+			case PlayerController.ATTACKING:	player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
+												break;
 			default:							player = AnimatedAssets.getFrame(state, stateFrame);
 												break;
 		}
@@ -57,6 +59,8 @@ public class PlayerView extends CharacterView {
 			case PlayerController.SLIDING:		player = AnimatedAssets.getFrame(facingDir, 0);
 												break;
 			case PlayerController.INIT_CARRYING:player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
+												break;
+			case PlayerController.ATTACKING: 	player = AnimatedAssets.getFrame(state, facingDir, stateFrame);
 												break;
 			default:							player = AnimatedAssets.getFrame(state, stateFrame);
 												break;

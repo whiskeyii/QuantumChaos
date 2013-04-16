@@ -97,7 +97,7 @@ public class Assets {
 		dialogSchrodinger = load("data/images/dialogueBox_Schrodinger.png", 0, 0, 1024, 256, false);
 		dialogDave = load("data/images/dialogueBox_Dave Small.png", 0, 0, 1024, 256, false);
 		dialogCat = load("data/images/dialogueBox_Cat.png", 0, 0, 1024, 256, false);
-		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
+		dialogBoxBG = load("data/images/dialogBoxBG.png", 0, 0, 1024, 256, false);
 		pauseBG = load("data/images/pause_bg.png", 0, 0, 1024, 768, false);
 		
 		// SOUND FX

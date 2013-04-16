@@ -104,8 +104,11 @@ public class PlayerController extends ObjectController implements Obstructing {
 										break;
 				case Input.INTERACT:	((PlayerModel)model).interactWith(interactingWith);
 										break;
+				case Input.ATTACK: 		((PlayerModel)model).attack();
+										break;
 			}
 		}
+		System.out.println("Key pressed: " + keyPressed);
 		System.out.println("State: " + state);
 		System.out.println(position);
 	}
@@ -132,6 +135,10 @@ public class PlayerController extends ObjectController implements Obstructing {
 			resetState();
 		}
 		if (state == INIT_CARRYING && stateFrame >= AnimatedAssets.numPickUpFrames) {
+			state = IDLE;
+			resetState();
+		}
+		if (state == ATTACKING && stateFrame >= AnimatedAssets.numAttackingFrames) {
 			state = IDLE;
 			resetState();
 		}
