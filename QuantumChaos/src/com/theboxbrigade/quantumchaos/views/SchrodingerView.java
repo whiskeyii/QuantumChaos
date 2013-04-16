@@ -20,10 +20,17 @@ public class SchrodingerView extends CharacterView {
 	}
 	
 	public void update(float x, float y, int facingDir) {
-		if (facingDir == 1) { // EAST
-			schrodinger = Assets.schrodingerE;
-		} else if (facingDir == 2) { // SOUTH
-			schrodinger = Assets.schrodingerS;
+		
+		if (facingDir == Globals.EAST) {
+			if (!Globals.K)
+				schrodinger = Assets.schrodingerE;
+			else
+				schrodinger = Assets.dave;
+		} else if (facingDir == Globals.SOUTH) {
+			if (!Globals.K)
+				schrodinger = Assets.schrodingerS;
+			else
+				schrodinger = Assets.dave;
 		}
 		draw(schrodinger, x, y);
 	}

@@ -11,10 +11,12 @@ import com.theboxbrigade.quantumchaos.general.Globals;
 public class JournalPageView extends View {
 	protected int state;
 	protected String text;
-	//protected BitmapFont font = Assets.journalFont;
-	protected BitmapFont font = Assets.font;
+	protected BitmapFont font = Assets.journalFont;
+	//protected BitmapFont font = Assets.font;
 	protected Sprite page = Assets.journalPage;
+	//protected Sprite page = Assets.redKey;
 	protected Sprite pageLarge = Assets.journalPageLarge;
+	//protected Sprite pageLarge = Assets.blueKey;
 	
 	public JournalPageView(String text) {
 		this.text = text;
@@ -42,7 +44,9 @@ public class JournalPageView extends View {
 		spriteBatch.draw(region, x, y);
 		if (state == JournalPageController.PICKED_UP) {
 			font.setColor(Color.BLACK);
+			font.setScale(0.8f, 0.8f);
 			font.drawWrapped(spriteBatch, text, Globals.GAME_WIDTH / 2.0f - 170, Globals.GAME_HEIGHT / 2.0f + 200, 285);
+			font.setScale(1.0f, 1.0f);
 			font.setColor(Color.WHITE);
 		}
 		

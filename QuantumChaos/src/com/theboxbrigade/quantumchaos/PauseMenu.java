@@ -14,11 +14,11 @@ public class PauseMenu {
 	public static final int MAIN_MENU = 3;
 	public static final String[] opts = {"Resume Game","Return to The Hub","Controls","Main Menu"};
 	public static final String[] controls = {
-		"W: Walk/Face North",
-		"A: Walk/Face West",
-		"S: Walk/Face South",
-		"D: Walk/Face East",
-		"E: Interact",
+		"W: Walk/Face West",
+		"A: Walk/Face South",
+		"S: Walk/Face East",
+		"D: Walk/Face North",
+		"Q: Interact",
 		"SPACE: Attack",
 		"",
 		"(ESCAPE to return)"

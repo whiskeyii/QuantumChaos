@@ -19,6 +19,7 @@ public class BoxController extends ObjectController implements Interactable, Obs
 	protected float x;
 	protected float y;
 	public int state = CLOSED;
+	protected boolean locked = false;
 	private DialogBox dialogBox;
 	private String dialogBoxText;
 	private TileManager tileManager;
@@ -62,6 +63,10 @@ public class BoxController extends ObjectController implements Interactable, Obs
 		return dialogBoxText;
 	}
 	
+	public String getLockedText() {
+		return "It's locked.";
+	}
+	
 	public Sprite getDialogBoxPortrait() {
 		if (color == BoxView.RED) return Assets.redBoxOpen;
 		else if (color == BoxView.GREEN) return Assets.greenBoxOpen;
@@ -75,6 +80,10 @@ public class BoxController extends ObjectController implements Interactable, Obs
 		if (state == OPEN) return true;
 		return false;
 	}
+	
+	public void setLocked(boolean locked) { this.locked = locked; }
+	
+	public boolean isLocked() { return locked; }
 	
 	public void setScreenPosition(float x, float y) {
 		this.x = x;
@@ -108,8 +117,10 @@ public class BoxController extends ObjectController implements Interactable, Obs
 
 	@Override
 	public void whenInteractedWith() {
-		System.out.println("Toggling open box");
-		((BoxModel)model).toggleOpen();
+		if (!locked) {
+			System.out.println("Toggling open box");
+			((BoxModel)model).toggleOpen();
+		} else System.out.println("Box locked");
 	}
 
 	public void setWorldToTravelTo(int worldToTravelTo) {

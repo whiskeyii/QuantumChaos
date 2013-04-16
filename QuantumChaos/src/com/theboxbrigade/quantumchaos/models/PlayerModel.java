@@ -86,6 +86,9 @@ public class PlayerModel extends CharacterModel {
 		if (interactable.interactableType() == Interactable.PLANET
 				|| interactable.interactableType() == Interactable.KEY)
 			state = PlayerController.INIT_CARRYING;
+		if (interactable.interactableType() == Interactable.JOURNAL_PAGE) {
+			((PlayerController)controller).blockInput = true;
+		}
 		interactable.whenInteractedWith();
 		sync();
 	}

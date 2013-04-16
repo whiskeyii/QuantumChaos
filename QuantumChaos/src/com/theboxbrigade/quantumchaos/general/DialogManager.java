@@ -15,9 +15,9 @@ public class DialogManager {
 	public DialogManager() {
 		dialog = new Array<String>();
 	}
-	
+
 	public boolean loadFile(String filePath) {
-		if (dialog != null) clearDialog();
+		reset();
 		FileHandle handle = Gdx.files.internal(filePath);
 		try {
 			String text = handle.readString();
@@ -33,6 +33,11 @@ public class DialogManager {
 	
 	public void clearDialog() {
 		dialog.clear();
+	}
+	
+	private void reset() {
+		clearDialog();
+		it = null;
 	}
 	
 	public String getString() {

@@ -36,4 +36,11 @@ public class Globals {
 	public static final int STATE_GALILEO_BEATEN = 10;
 	public static final int STATE_NEWTON_BEATEN = 11;
 	public static int GAME_STATE = -1;
+	
+	
+	// These should be in a separate file, but they're here for now
+	public static boolean K = false;
+	// Worlds beaten?
+	public static boolean Galileo = false;
+	public static boolean Newton = false; 
 }

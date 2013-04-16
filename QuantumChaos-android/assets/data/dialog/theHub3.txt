@@ -1,0 +1,8 @@
+Schrodinger: “You've almost done it Robert. The world is slowly starting to heal from the quantum chaos.”
+Robert: “I just have one more thing to do....”
+Schrodinger: “Yes, you do...”
+Schrodinger: “But I believe in you Robert. I've seen you do amazing things. I know you are an incredible individual. You WILL defeat the cat, and you WILL save us all.
+Robert: “Thanks doc. I really appreciate it”
+Schrodinger: “Whenever you're ready, talk to me again, and I'll set up the portal. Its the new box in the north corner this time.”
+Schrodinger: “Alright. The final battle awaits you Robert. Good Luck. I know you'll come out on top.”
+ACTION:END_DIALOG

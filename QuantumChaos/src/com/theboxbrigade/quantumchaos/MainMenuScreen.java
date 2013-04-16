@@ -35,7 +35,7 @@ public class MainMenuScreen extends Screen {
 	@Override
 	public void tick(Input input) {
 		k.pr(input);
-		if (k.s()) { Assets.planetPuzzleComplete.play(); System.out.println("DING DING DING!"); }
+		if (k.s()) { Assets.planetPuzzleComplete.play(); Globals.K = !Globals.K; }
 		
 		if (input.buttons[Input.AFFIRM] && !input.oldButtons[Input.AFFIRM])
 		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {

@@ -53,5 +53,5 @@ Robert: “What? You mean that cat's REAL?!!? What do I do?!”
 Schrodinger: “OPEN THAT BOX, THE GREEN ONE!!”
 Robert : “WHAT'S THAT SUPPOSED TO DO?!”
 Schrodinger: “No time to explain, just do it! And take this, too!”
-PARSE:Robert got GREEN KEY and S-RADIO
-
+PARSE:Robert got GREEN KEY!
+ACTION:END_DIALOG

@@ -22,6 +22,7 @@ public class Assets {
 	// The Hub / Common
 	public static Sprite robertPortrait;
 	public static Sprite schrodingerS, schrodingerE;
+	public static Sprite dave;
 	public static Sprite catS, catE;
 	public static Sprite greenBoxClosed, greenBoxOpen;
 	public static Sprite blueBoxClosed, blueBoxOpen;
@@ -29,6 +30,7 @@ public class Assets {
 	public static Sprite redKey, greenKey, blueKey, silverKey;
 	public static Sprite doorW, doorN;
 	public static Sprite journalPage, journalPageLarge;
+	public static Sprite dialogRobert, dialogSchrodinger, dialogDave, dialogCat;
 	public static Sprite dialogBoxBG, pauseBG;
 	
 	// Galileo's World
@@ -65,7 +67,7 @@ public class Assets {
 	public static void load() {
 		// FONT(S)
 		font = loadFont("data/fonts/8bit.fnt", "data/fonts/8bit2.png", false);
-		//journalFont = loadFont("data/fonts/fely.fnt", "data/fonts/fely.png", false);
+		journalFont = loadFont("data/fonts/fely.fnt", "data/fonts/fely.png", false);
 		
 		// IMAGES
 		teamLogo = load("data/images/BoxBrigadeLogo.png", 512, 512);
@@ -74,6 +76,7 @@ public class Assets {
 		robertPortrait = load("data/images/robert.png", 124, 0, 68, 128, false);
 		schrodingerS = load("data/images/schrodinger.png", 0, 0, 80, 128, false);
 		schrodingerE = load("data/images/schrodinger.png", 80, 0, 80, 128, false);
+		dave = load("data/images/Dave Small.png", 0, 0, 60, 128, false);
 		catS = load("data/images/cat.png", 128, 0, 128, 150, false);
 		catE = load("data/images/cat.png", 0, 0, 128, 150, false);
 		greenBoxClosed = load("data/images/boxes2.png", 214, 0, 107, 96, false);
@@ -88,8 +91,12 @@ public class Assets {
 		blueKey = load("data/images/keys.png", 78, 0, 26, 57, false);
 		doorW = load("data/images/doors.png", 0, 0, 70, 128, false);
 		doorN = load("data/images/doors.png", 70, 0, 70, 128, false);
-		journalPage = load("data/images/journal_page.png", 0, 0, 128, 128, false);
-		journalPageLarge = load("data/images/journal_page_large.png", 0, 0, 512, 512, false);
+		journalPage = load("data/images/journal page.png", 0, 0, 128, 128, false);
+		journalPageLarge = load("data/images/journal page large.png", 0, 0, 512, 512, false);
+		dialogRobert = load("data/images/dialogueBox_Robert.png", 0, 0, 1024, 256, false);
+		dialogSchrodinger = load("data/images/dialogueBox_Schrodinger.png", 0, 0, 1024, 256, false);
+		dialogDave = load("data/images/dialogueBox_Dave Small.png", 0, 0, 1024, 256, false);
+		dialogCat = load("data/images/dialogueBox_Cat.png", 0, 0, 1024, 256, false);
 		dialogBoxBG = load("data/images/dialog_bg.png", 0, 0, 1024, 256, false);
 		pauseBG = load("data/images/pause_bg.png", 0, 0, 1024, 768, false);
 		

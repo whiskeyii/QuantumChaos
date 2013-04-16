@@ -70,7 +70,7 @@ public class Newton2 extends World {
 		objects = new Array<ObjectController>();
 		populateWorld();
 		
-		nextWorld = Globals.NEWTON2;
+		nextWorld = Globals.THE_HUB;
 		Assets.newtonMusic.setLooping(true);
 		Assets.newtonMusic.play();
 	}
@@ -178,6 +178,7 @@ public class Newton2 extends World {
 			}
 			
 			checkDoorUnlockable();
+			checkReadyToLeave();
 		}
 	}
 	
@@ -305,8 +306,9 @@ public class Newton2 extends World {
 	}
 	
 	protected void checkReadyToLeave() {
-		if (robert.getPosition().getTile().equals(tileManager.getTile(6, 4))) {
+		if (robert.getPosition().getTile().equals(tileManager.getTile(4, 6))) {
 			readyToLeave = true;
+			Globals.Newton = true;
 		}
 	}
 

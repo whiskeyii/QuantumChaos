@@ -22,6 +22,7 @@ import com.theboxbrigade.quantumchaos.general.Assets;
 import com.theboxbrigade.quantumchaos.general.DialogManager;
 import com.theboxbrigade.quantumchaos.general.Globals;
 import com.theboxbrigade.quantumchaos.general.Input;
+import com.theboxbrigade.quantumchaos.views.KeyView;
 import com.theboxbrigade.quantumchaos.views.PlanetView;
 
 public class Galileo1 extends World {
@@ -42,7 +43,7 @@ public class Galileo1 extends World {
 	protected boolean puzzleComplete = false;
 	protected KeyController key;
 	protected DoorController door;
-	protected JournalPageController journalPage;
+	//protected JournalPageController journalPage;
 	
 	protected PauseMenu pauseMenu = new PauseMenu();
 	protected boolean showDialog;
@@ -80,7 +81,7 @@ public class Galileo1 extends World {
 		objects = new Array<ObjectController>();
 		populateWorld();
 		
-		nextWorld = Globals.GALILEO2;
+		nextWorld = Globals.THE_HUB;
 		bgMusic = Assets.galileoMusic;
 		bgMusic.setVolume(0.2f);
 		bgMusic.setLooping(true);
@@ -96,7 +97,7 @@ public class Galileo1 extends World {
 		// Draw the Tiled Map
 		tileMapRenderer.setView(camera);
 		tileMapRenderer.render();
-		
+
 		// Draw objects under Robert
 		for (ObjectController object : objects) {
 			spriteBatch = object.getViewSpriteBatch();
@@ -132,6 +133,14 @@ public class Galileo1 extends World {
 				dialogBox.update();
 			spriteBatch.end();
 		}
+		
+		// Journal Page
+		/*
+		spriteBatch = journalPage.getViewSpriteBatch();
+		spriteBatch.begin();
+			journalPage.update(delta);
+		spriteBatch.end();
+		*/
 		
 		// Pause Menu
 		spriteBatch = pauseMenu.getSpriteBatch();
@@ -311,18 +320,20 @@ public class Galileo1 extends World {
 		door.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.5f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 8.0f);
 		objects.add(door);
 		
-		key = new KeyController(tileManager, -1);
+		key = new KeyController(tileManager, KeyView.RED);
 		key.setPosition(tileManager.getTile(13,6));
 		key.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 4.25f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 5.5f);
 		key.setObstructing(false);
 		objects.add(key);
 		
 		// Journal Page
-		journalPage = new JournalPageController(tileManager, "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.");
+		/*
+		journalPage = new JournalPageController(tileManager, "Too long have I been shun for my theories. Too long has my thinking been punished and my mind constricted.  Heliocentricity... It is a fact, I know it is... but... I can't seem to remember... everything is out of order... The world has gone awry. It must be fixed...");
 		journalPage.setPosition(tileManager.getTile(11,6));
 		journalPage.setScreenPosition(Globals.GAME_WIDTH / 2.0f + Globals.TILE_WIDTH * 2.75f, Globals.GAME_HEIGHT / 2.0f + Globals.TILE_HEIGHT * 6.5f);
 		journalPage.setObstructing(false);
 		objects.add(journalPage);
+		*/
 	}
 	
 	/**
@@ -342,9 +353,11 @@ public class Galileo1 extends World {
 			key.setObstructing(true);
 			key.setVisible(true);
 			key.setInteractable(true);
+			/*
 			journalPage.setObstructing(true);
 			journalPage.setVisible(true);
 			journalPage.setInteractable(true);
+			*/
 			Assets.planetPuzzleComplete.play();
 		}
 	}
@@ -477,6 +490,7 @@ public class Galileo1 extends World {
 	protected void checkReadyToLeave() {
 		if (robert.getPosition().getTile().equals(tileManager.getTile(11, 3))) {
 			readyToLeave = true;
+			Globals.Galileo = true;
 		}
 	}
 	

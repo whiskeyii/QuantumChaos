@@ -29,6 +29,8 @@ public class TheHub extends World {
 	protected final String mapName = "TheHub";
 	protected final String dialogPath = "data/dialog/";
 	protected final String dialogName = "theHub.txt";
+	protected final String dialogName2 = "theHub2.txt";
+	protected final String dialogName3 = "theHub3.txt";
 	
 	protected TileManager tileManager;
 	protected DialogManager dialogManager;
@@ -41,6 +43,7 @@ public class TheHub extends World {
 	protected PauseMenu pauseMenu = new PauseMenu();
 	protected boolean showDialog;
 	protected DialogBox dialogBox;
+	protected boolean dialogEnded = false;
 
 	protected Music bgMusic;
 	
@@ -66,7 +69,12 @@ public class TheHub extends World {
 		
 		tileManager = new TileManager(tileMap);
 		dialogManager = new DialogManager();
-		dialogManager.loadFile(dialogPath + dialogName);
+		if (Globals.Newton)
+			dialogManager.loadFile(dialogPath + dialogName3);
+		else if (Globals.Galileo)
+			dialogManager.loadFile(dialogPath + dialogName2);
+		else
+			dialogManager.loadFile(dialogPath + dialogName);
 		
 		// Place Objects in the World
 		dialogBox = new YesNoDialogBox();
@@ -189,7 +197,15 @@ public class TheHub extends World {
 			checkOpenBox();
 			checkSchrodingerTalking();
 			closeInactiveBoxes();
-			//closeInactiveDialog();
+			
+			// When done talking to Dr. Schrodinger, unlock Galileo's World
+			if (dialogBox.isDialogEnded() && greenBox.isLocked()) {
+				greenBox.setLocked(false);
+			}
+			// When Galileo's World is beaten, unlock Newton's World
+			if (Globals.Galileo) {
+				redBox.setLocked(false);
+			}
 		}
 	}
 
@@ -302,8 +318,10 @@ public class TheHub extends World {
 		objects.add(greenBox);
 		redBox.setPosition(tileManager.getTile(10, 14));
 		redBox.setScreenPosition(Globals.TILE_WIDTH*1.5f, Globals.TILE_HEIGHT*8.5f);
+		redBox.setLocked(true);
 		greenBox.setPosition(tileManager.getTile(10, 5));
 		greenBox.setScreenPosition(Globals.TILE_WIDTH*6.75f, Globals.TILE_HEIGHT*13.5f);
+		greenBox.setLocked(true);
 	}
 
 	protected void processPauseInput() {

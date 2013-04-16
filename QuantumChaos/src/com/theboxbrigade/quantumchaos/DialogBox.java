@@ -4,12 +4,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.theboxbrigade.quantumchaos.general.Assets;
+import com.theboxbrigade.quantumchaos.general.Globals;
 
 public class DialogBox {
+	protected static final String ACTION_END_DIALOG = "END_DIALOG";
 	protected SpriteBatch spriteBatch = new SpriteBatch();
 	protected BitmapFont font = Assets.font;
 	protected boolean visible;
 	protected boolean useGeneratedPortrait = true;
+	protected boolean dialogEnded = false;
 	protected float offX, offY;
 	
 	protected Sprite bg = Assets.dialogBoxBG;
@@ -22,7 +25,7 @@ public class DialogBox {
 	// offsets for portrait / text
 	protected static final int START_PORTRAIT_X = 100;
 	protected static final int START_PORTRAIT_Y = 75;
-	protected static final int START_TEXT_X = 275;
+	protected static final int START_TEXT_X = 260;
 	protected static final int START_TEXT_Y = 200;
 	
 	public DialogBox() {
@@ -61,20 +64,46 @@ public class DialogBox {
 		if (colonIndex > 0) {
 			String talker = text.substring(0, colonIndex);
 			if (talker.equals("Schrodinger") || talker.equals("Unknown Man")) {
-				if (talkingPortrait != Assets.schrodingerE)
-					talkingPortrait = Assets.schrodingerE;
+				if (!Globals.K) {
+					if (talkingPortrait != Assets.schrodingerE) {
+						talkingPortrait = Assets.schrodingerE;
+						bg = Assets.dialogSchrodinger;
+					}
+				} else {
+					if (talkingPortrait != Assets.dave) {
+						talkingPortrait = Assets.dave;
+						bg = Assets.dialogDave;
+					}
+				}
 			} else if (talker.equals("Robert")) {
-				if (talkingPortrait != Assets.robertPortrait)
+				if (talkingPortrait != Assets.robertPortrait) {
 					talkingPortrait = Assets.robertPortrait;
+					bg = Assets.dialogRobert;
+				}
 			} else if (talker.equals("Cat")) {
-				if (talkingPortrait != Assets.catE)
+				if (talkingPortrait != Assets.catE) {
 					talkingPortrait = Assets.catE;
+					bg = Assets.dialogCat;
+				}
 			} else if (talker.equals("Schrodinger (Radio)")) {
 				// TODO: Replace with Radio
-				if (talkingPortrait != Assets.schrodingerE)
+				if (talkingPortrait != Assets.schrodingerE) {
 					talkingPortrait = Assets.schrodingerE;
+					bg = Assets.dialogSchrodinger;
+				}
 			} else if (talker.equals("PARSE")) {
 				text = text.substring(colonIndex+1);
+				if (talkingPortrait != Assets.robertPortrait) {
+					talkingPortrait = Assets.robertPortrait;
+					bg = Assets.dialogRobert;
+				}
+			} else if (talker.equals("ACTION")) {
+				String action = text.substring(colonIndex+1);
+				if (action.trim().equals(ACTION_END_DIALOG)) {
+					bg = Assets.dialogRobert;
+					dialogEnded = true;
+				}
+				text = "";
 			}
 		}
 	}
@@ -99,6 +128,10 @@ public class DialogBox {
 		return visible;
 	}
 	
+	public boolean isDialogEnded() {
+		return dialogEnded;
+	}
+	
 	public SpriteBatch getSpriteBatch() {
 		return spriteBatch;
 	}
@@ -110,7 +143,7 @@ public class DialogBox {
 	
 	protected void draw() {
 		spriteBatch.draw(bg, 0, 0);
-		spriteBatch.draw(talkingPortrait, START_PORTRAIT_X+offX, START_PORTRAIT_Y+offY);
+		//spriteBatch.draw(talkingPortrait, START_PORTRAIT_X+offX, START_PORTRAIT_Y+offY);
 		font.setColor(0, 0, 0, 1.0f);
 		font.drawWrapped(spriteBatch, text, START_TEXT_X, START_TEXT_Y, 700);
 	}

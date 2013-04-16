@@ -1,0 +1,9 @@
+Schrodinger: “Congratulations Robert! You've restored order to Galileo's domain and saved his mind.”
+Robert: “Yeah, it was no easy task....”
+Schrodinger: “Well, now that that's settled, off to the next world!”
+Robert: “ Ahhhhhh. I just got back from the last one.... can't I take a break?”
+Schrodinger: “You remember what happened the last time you stayed here too long.”
+Robert: “Yah... yah...”
+Schrodinger: “So hurry up and use that key you got from Galileo and use it on box the over there to the right”
+Robert: “Ok...”
+ACTION:END_DIALOG
